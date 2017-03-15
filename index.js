@@ -2,9 +2,16 @@
 
 var AwesomeModule = require('awesome-module');
 var Dependency = AwesomeModule.AwesomeModuleDependency;
-var path = require('path');
+let path = require('path');
+let glob = require('glob-all');
+let _ = require('lodash');
 
-var myAwesomeModule = new AwesomeModule('esn.helloworld', {
+const NAME = 'onlyoffice';
+const APP_ENTRY_POINT = NAME + '.app.js';
+const MODULE_NAME = 'linagora.esn.' + NAME;
+const FRONTEND_JS_PATH = __dirname + '/frontend/app/';
+
+var onlyOfficeModule = new AwesomeModule('linagora.esn.onlyoffice', {
   dependencies: [
     new Dependency(Dependency.TYPE_NAME, 'linagora.esn.core.logger', 'logger'),
     new Dependency(Dependency.TYPE_NAME, 'linagora.esn.core.webserver.wrapper', 'webserver-wrapper')
@@ -12,39 +19,36 @@ var myAwesomeModule = new AwesomeModule('esn.helloworld', {
 
   states: {
     lib: function(dependencies, callback) {
-      var helloworldlib = require('./backend/lib')(dependencies);
-      var helloworld = require('./backend/webserver/api/helloworld')(dependencies);
+      let libModule = require('./backend/lib')(dependencies);
+      let onlyoffice = require('./backend/webserver/api')(dependencies, libModule);
 
-      var lib = {
+      let lib = {
         api: {
-          helloworld: helloworld
+          onlyoffice: onlyoffice
         },
-        lib: helloworldlib
+        lib: libModule
       };
 
       return callback(null, lib);
     },
 
     deploy: function(dependencies, callback) {
-      // Register the webapp
-      var app = require('./backend/webserver')(dependencies, this);
-      // Register every exposed endpoints
-      app.use('/', this.api.helloworld);
+      let webserverWrapper = dependencies('webserver-wrapper');
+      let app = require('./backend/webserver')(this, dependencies);
+      let lessFile = path.resolve(__dirname, './frontend/app/styles.less');
+      let frontendModules = glob.sync([
+        FRONTEND_JS_PATH + '**/!(*spec).js'
+      ]).map(filepath => filepath.replace(FRONTEND_JS_PATH, ''));
 
-      var webserverWrapper = dependencies('webserver-wrapper');
-      // Register every exposed frontend scripts
-      var jsFiles = [
-        'app.js',
-        'helloworld/services.js',
-        'helloworld/directives.js',
-        'helloworld/controllers.js'
-      ];
-      webserverWrapper.injectAngularModules('helloworld', jsFiles, ['esn.helloworld'], ['esn']);
-      var lessFile = path.resolve(__dirname, './frontend/css/styles.less');
-      webserverWrapper.injectLess('helloworld', [lessFile], 'esn');
-      webserverWrapper.addApp('helloworld', app);
+      _.pull(frontendModules, APP_ENTRY_POINT);
+      frontendModules = [APP_ENTRY_POINT].concat(frontendModules);
 
-      return callback();
+      app.use('/api', this.api.onlyoffice);
+      webserverWrapper.injectAngularAppModules(NAME, frontendModules, MODULE_NAME, ['esn']);
+      webserverWrapper.injectLess(NAME, [lessFile], 'esn');
+      webserverWrapper.addApp(NAME, app);
+
+      callback();
     }
   }
 });
@@ -53,4 +57,4 @@ var myAwesomeModule = new AwesomeModule('esn.helloworld', {
  * The main AwesomeModule describing the application.
  * @type {AwesomeModule}
  */
-module.exports = myAwesomeModule;
+module.exports = onlyOfficeModule;

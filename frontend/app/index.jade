@@ -1,0 +1,18 @@
+.card
+  .card-header
+    h1 ONLYOFFICE™ Online Editors
+  .card-body.card-padding
+    .try-editor-list
+      li
+        a.try-editor(ui-sref="editor-onlyoffice({fileExt: 'docx'})") Document
+      li
+        a.try-editor(ui-sref="editor-onlyoffice({fileExt: 'xlsx'})") Spreadsheet
+      li
+        a.try-editor(ui-sref="editor-onlyoffice({fileExt: 'pptx'})") Presentation
+  
+span(id="loadScripts", ng-attr-data-docs="{{preloaderUrl}}")
+script.
+  var ConverExtList = "{{convertExts}}";
+  var EditedExtList = "{{editedExts}}";
+  var UrlConverter = "convert";
+  var UrlEditor = "editor";
