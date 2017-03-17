@@ -1,18 +1,29 @@
-.card
-  .card-header
-    h1 ONLYOFFICE™ Online Editors
-  .card-body.card-padding
-    .try-editor-list
-      li
-        a.try-editor(ui-sref="editor-onlyoffice({fileExt: 'docx'})") Document
-      li
-        a.try-editor(ui-sref="editor-onlyoffice({fileExt: 'xlsx'})") Spreadsheet
-      li
-        a.try-editor(ui-sref="editor-onlyoffice({fileExt: 'pptx'})") Presentation
-  
-span(id="loadScripts", ng-attr-data-docs="{{preloaderUrl}}")
-script.
-  var ConverExtList = "{{convertExts}}";
-  var EditedExtList = "{{editedExts}}";
-  var UrlConverter = "convert";
-  var UrlEditor = "editor";
+script(src='/onlyoffice/js/rsvp-2.0.4.js')
+script(src='/onlyoffice/js/renderjs-latest.js')
+script(src='/onlyoffice/js/jio.js')
+script(src='/onlyoffice/js/onlyoffice.js')
+style.
+  .iframe {
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+  }
+  iframe {
+    width: 100%;
+    height: 100%;
+  }
+  .container-fluid {
+    height: 700px !important
+  }
+div
+  form(name='upload')
+    input(type="file" name="data")
+    input(type="hidden" name="source_format" value="docx")
+    input(type="hidden" name="destination_format" value="docy")
+    input(type="submit" value="Upload")
+  form(name='download')
+    input(type="hidden" name="source_format" value="docy")
+    input(type="hidden" name="destination_format" value="docx")
+    input(type="submit" value="Download")
+div.iframe(data-gadget-scope="editor" data-gadget-url="https://text-gadget.app.officejs.com/1.1/" data-gadget-sandbox="iframe")

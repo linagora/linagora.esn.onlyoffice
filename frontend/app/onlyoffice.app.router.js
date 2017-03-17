@@ -9,10 +9,5 @@
         templateUrl: '/onlyoffice/app/index.html',
         controller: 'OnlyOfficeIndexController'
       })
-      .state('editor-onlyoffice', {
-        url: '/onlyoffice/editor/:fileExt',
-        templateUrl: '/onlyoffice/app/editor/index.html',
-        controller: 'OnlyOfficeEditorController as Ctrl'
-      });
   });
 })();

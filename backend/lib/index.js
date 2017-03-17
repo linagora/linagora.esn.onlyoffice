@@ -1,7 +1,9 @@
 'use strict';
 
 module.exports = function(dependencies) {
-  var api = {};
+  const convertion = require('./convertion')(dependencies);
 
-  return api;
+  return {
+    convertion: convertion
+  }
 };
