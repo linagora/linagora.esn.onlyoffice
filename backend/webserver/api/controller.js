@@ -31,22 +31,26 @@ module.exports = function(dependencies, lib) {
         }
       });
       busboy.on('finish', function() {
-        options.data = options.data.toString('base64');
-        lib.convertion.convertionWithCloudoo(options, function(err, result) {
-          if(err) {
-            res.status(500).json({
-              error: {
-                code: 500,
-                message: 'Error when converting document',
-                detail: err
-              }
-            });
-          } else {
-            var decodedFile = Buffer.from(result, 'base64')
-            res.writeHead(200)
-            res.end(decodedFile);
-          }
-        });
+        if(options.data) {
+          options.data = options.data.toString('base64');
+          lib.convertion.convertionWithCloudoo(options, function(err, result) {
+            if(err) {
+              res.status(500).json({
+                error: {
+                  code: 500,
+                  message: 'Error when converting document',
+                  detail: err
+                }
+              });
+            } else {
+              var decodedFile = Buffer.from(result, 'base64')
+              res.writeHead(200)
+              res.end(decodedFile);
+            }
+          });
+        }
+        res.writeHead(200)
+        res.end();
       });
       req.pipe(busboy);
     }
