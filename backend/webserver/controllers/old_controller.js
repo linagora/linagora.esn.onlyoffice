@@ -3,12 +3,14 @@
 module.exports = function(dependencies, lib) {
   const logger = dependencies('logger');
   const Busboy = require('busboy');
-  const atob = require('atob');
+  const filestore = dependencies('filestore');
 
   return {
-    convertion: convertion
+    convertion: convertion,
+    convertionFile: convertionFile
   };
 
+  // Cette fonction doit maintenant servir lors de la creation d'un nouveaux document
   function convertion(req, res) {
     let options = {};
 
@@ -48,11 +50,22 @@ module.exports = function(dependencies, lib) {
               res.end(decodedFile);
             }
           });
+        } else {
+          res.writeHead(200)
+          res.end();
         }
-        res.writeHead(200)
-        res.end();
       });
       req.pipe(busboy);
     }
+  };
+
+
+  function convertionFile(req, res) {
+
+    /*filestore.get(req.params.fileId, function(err, fileMeta, readStream) {
+      readStream.on('data', (chunk) => {
+        console.log(chunk.toString());
+      })
+    });*/
   };
 }

@@ -1,20 +1,2 @@
-.card
-  .card-header
-    h1 ONLYOFFICE™ Online Editors
-  .card-body.card-padding
-    .try-editor-list
-      li
-        a.try-editor(ui-sref="editor({fileExt: 'docx'})") Document
-          img(src="/onlyoffice/images/file_doct.png")
-      li
-        a.try-editor(ui-sref="editor({fileExt: 'xlsx'})") Spreadsheet
-          img(src="/onlyoffice/images/file_xlst.png")
-      li
-        a.try-editor(ui-sref="editor({fileExt: 'pptx'})") Presentation
-          img(src="/onlyoffice/images/file_pptt.png")
-    div
-      form(name='upload')
-        input(type="file" name="")
-        input(type="hidden" name="source_format" ng-value="{{source_format}}")
-        input(type="hidden" name="destination_format" ng-value="{{destination_format}}")
-        input(type="submit" value="Upload")
+document-list
+creation-document

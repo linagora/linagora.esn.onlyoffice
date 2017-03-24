@@ -9,11 +9,11 @@
         gadgetChooser: gadgetChooser
       };
 
-      function gadgetChooser (fileExt) {
+      function gadgetChooser(fileExt) {
         var gadgets = {
-           docx: 'text-gadget',
-           xlsx: 'spreadsheet-gadget',
-           pptx: 'presentation-gadget'
+           docx: 'http://text-gadget.app.officejs.com/',
+           xlsx: 'http://spreadsheet-gadget.app.officejs.com/',
+           pptx: 'http://presentation-gadget.app.officejs.com/'
         }
 
         switch (fileExt) {
@@ -27,7 +27,7 @@
             return gadgets.pptx
             break;
           default:
-            return false;
+            return gadgets.docx;
         }
       }
     }

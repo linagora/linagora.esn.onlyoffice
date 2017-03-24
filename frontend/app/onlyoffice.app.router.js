@@ -6,11 +6,12 @@
     $stateProvider
       .state('index', {
         url: '/onlyoffice/index',
-        templateUrl: '/onlyoffice/app/index.html'
+        templateUrl: '/onlyoffice/app/index.html',
+        controller: 'OnlyOfficeIndexController'
       })
       .state('editor', {
-        url: '/onlyoffice/editor/:fileExt',
-        templateUrl: '/onlyoffice/app/editor.html',
+        url: '/onlyoffice/editor/:fileExt/:fileId',
+        templateUrl: '/onlyoffice/app/editor/editor.html',
         controller: 'OnlyOfficeEditorController'
       })
   });

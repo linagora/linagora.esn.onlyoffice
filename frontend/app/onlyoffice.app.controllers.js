@@ -2,44 +2,37 @@
   'use strict';
 
   angular.module('linagora.esn.onlyoffice')
-    .controller('OnlyOfficeEditorController', OnlyOfficeEditorController);
+    .controller('OnlyOfficeIndexController', OnlyOfficeIndexController);
 
-    function OnlyOfficeEditorController($stateParams, $scope, $element, gadgetChooserService, jioService) {
-      $scope.source_format = $stateParams.fileExt;
-      $scope.destination_format = $stateParams.fileExt.replace(/x$/, 'y');
-      $scope.gadget = gadgetChooserService.gadgetChooser($stateParams.fileExt);
+    function OnlyOfficeIndexController($scope, $state, $modal, fileUploadService, backgroundProcessorService, OnlyOfficeRestangular) {
 
-      var file = '';
+      //var myModal = $modal({scope: $scope, template: '/onlyoffice/app/modal/nameModal.html', show: false});
+      /*OnlyOfficeRestangular.all('files').getList().then(function(docs) {
+        console.log(docs);
+      })
 
-      window.rJS(window)
-        .allowPublicAcquisition('setFillStyle', function () {
-          return {
-            height: '100%',
-            width: '100%'
-          };
-        })
-        .declareJob('upload', function (evt) {
-          return jioService.upload(this, evt);
-        })
-        .declareJob('download', function (evt) {
-          return jioService.download(this, evt);
-        })
-        .ready(function() {
-          //TODO watch if a file is send and if no file create a empty document
-          this.upload();
-        })
-        .onEvent('submit', function (evt) {
-          console.log(evt);
-          if (evt.target.name === 'upload') {
-            return this.upload(evt);
-          } else if (evt.target.name === 'download') {
-            return this.download(evt);
-          } else {
-            throw new Error('Unknown form');
-          }
-        });
+      $scope.showModal = function() {
+        myModal.$promise.then(myModal.show);
+      }*/
 
-        window.rJS.manualBootstrap();
+      $scope.onFileSelect = function(file) {
+        // Get the uploaderService
+        var uploadService = fileUploadService.get();
 
+        // Add the file in the Queue and start the upload
+        var taskOpenFile = uploadService.addFile(file[0], true);
+
+        if (uploadService.isComplete()) {
+          goEditor(taskOpenFile);
+        } else {
+          backgroundProcessorService.add(uploadService.await(goEditor));
+        }
+      };
+
+      function goEditor(task) {
+        var extension = task[0].file.name.split(".").pop();
+        var fileid = task[0].response.data._id;
+        $state.go('editor', {'fileExt': extension, 'fileId': fileid});
+      }
     }
 })();

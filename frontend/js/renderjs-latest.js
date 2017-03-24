@@ -2242,7 +2242,6 @@ if (typeof document.contains !== 'function') {
             }
             gadget_loading_klass_list.shift();
           }).then(function () {
-
             // select the target node
             var target = document.querySelector('body'),
               // create an observer instance
@@ -2318,6 +2317,7 @@ if (typeof document.contains !== 'function') {
       }
       document.addEventListener('DOMContentLoaded',
                                 bootstrap_deferred_object.resolve, false);
+
       // Return Promies/Queue here instead of directly calling init()
       return new RSVP.Queue()
         .push(function () {

@@ -4,6 +4,8 @@
   angular.module('linagora.esn.onlyoffice', [
     'op.dynamicDirective',
     'ui.router',
-    'restangular'
+    'restangular',
+    'mgcrea.ngStrap',
+    'ngMaterial'
   ]);
 })();

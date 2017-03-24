@@ -1,0 +1,20 @@
+table.table
+  thead
+    tr
+      th #
+      th Nom
+      th Dernière Modification
+      th Taille
+      th action
+  tbody
+    tr(ng-repeat='document in documents track by $index')
+      td {{$index}}
+      td {{document.filename}}
+      td {{document.uploadDate}}
+      td {{document.length}}
+      td 
+        i.mdi.mdi-pencil.mdi-18px(ui-sref="editor({fileExt: getExtensionfromFileName(document.filename), fileId: document._id})")
+        i.mdi.mdi-delete.mdi-18px(ng-click="removeDocument(document)")
+    tr(ng-if="documents.length === 0")
+      td(colspan="5")
+        | Pas de Document
