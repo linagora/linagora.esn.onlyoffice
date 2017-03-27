@@ -26,7 +26,6 @@
         })
         .ready(function() {
           //TODO watch if a file is send and if no file create a empty document
-          console.log("toto");
           if($stateParams.fileId) {
             this.startEditor(null, $stateParams.fileId);
           } else {

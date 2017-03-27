@@ -100,8 +100,7 @@ module.exports = function(dependencies, lib) {
 
   function getMetaDataByUserId(req, res) {
     var documentMeta = [];
-
-    filestore.getAllMetaByUserId(req.user._id, function(err, metas) {
+    filestore.getAllMetaByUserId(req.user._id, req.query, function(err, metas) {
       if(err) {
         res.status(500).json({
           error: {
@@ -111,7 +110,6 @@ module.exports = function(dependencies, lib) {
           }
         });
       }
-
       metas.map(function(meta) {
         if (utils.fileIsEditorDocument(meta.contentType)) {
           return documentMeta.push(meta);

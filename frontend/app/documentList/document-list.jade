@@ -18,3 +18,8 @@ table.table
     tr(ng-if="documents.length === 0")
       td(colspan="5")
         | Pas de Document
+.row
+  md-button(ng-click="previousPage()" ng-disabled="currentPageNb === 1" class="md-icon-button launch")
+    i.mdi.mdi-arrow-left.mdi-24px
+  md-button(ng-click="nextPage()" ng-disabled="currentPageNb === lastPageNb" class="md-icon-button launch")
+    i.mdi.mdi-arrow-right.mdi-24px
