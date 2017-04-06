@@ -14,6 +14,8 @@ const FRONTEND_JS_PATH = __dirname + '/frontend/app/';
 var onlyOfficeModule = new AwesomeModule('linagora.esn.onlyoffice', {
   dependencies: [
     new Dependency(Dependency.TYPE_NAME, 'linagora.esn.core.logger', 'logger'),
+    new Dependency(Dependency.TYPE_NAME, 'linagora.esn.core.elasticsearch', 'elasticsearch'),
+    new Dependency(Dependency.TYPE_NAME, 'linagora.esn.core.email', 'email'),
     new Dependency(Dependency.TYPE_NAME, 'linagora.esn.core.filestore', 'filestore'),
     new Dependency(Dependency.TYPE_NAME, 'linagora.esn.core.webserver.wrapper', 'webserver-wrapper')
   ],
@@ -37,7 +39,7 @@ var onlyOfficeModule = new AwesomeModule('linagora.esn.onlyoffice', {
       let webserverWrapper = dependencies('webserver-wrapper');
       let app = require('./backend/webserver')(this, dependencies);
       let lessFile = path.resolve(__dirname, './frontend/app/styles.less');
-      
+
       let frontendModules = glob.sync([
         FRONTEND_JS_PATH + '**/!(*spec).js'
       ]).map(filepath => filepath.replace(FRONTEND_JS_PATH, ''));

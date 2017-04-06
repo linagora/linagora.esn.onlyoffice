@@ -7,12 +7,12 @@
       .state('index', {
         url: '/onlyoffice/index',
         templateUrl: '/onlyoffice/app/index.html',
-        controller: 'OnlyOfficeIndexController'
+        controller: 'IndexController'
       })
       .state('editor', {
         url: '/onlyoffice/editor/:fileExt/:fileId',
         templateUrl: '/onlyoffice/app/editor/editor.html',
-        controller: 'OnlyOfficeEditorController'
+        controller: 'EditorController'
       })
   });
 })();

@@ -3,15 +3,15 @@ md-fab-speed-dial.md-fab-bottom-right.md-fling(md-direction="up" aria-expanded="
     md-button.md-fab.md-warn(aria-label="menu")
       i.mdi.mdi-plus.mdi-24px
   md-fab-actions(aria-hidden="!isOpen")
-    md-button.md-fab.md-raised.md-mini.word(aria-label="Writer" ng-click="newDocument('docx')")
+    md-button.md-fab.md-raised.md-mini.word(aria-label="Writer" ng-click="showPrompt(event, 'docx')")
       md-tooltip(md-direction="left" md-visible="tooltipVisible" md-autohide="false")
         | Writer
       i.mdi.mdi-file-word.mdi-24px
-    md-button.md-fab.md-raised.md-mini.spreadsheet(aria-label="SpreadSheet" ng-click="newDocument('xlsx')")
+    md-button.md-fab.md-raised.md-mini.spreadsheet(aria-label="SpreadSheet" ng-click="showPrompt(event, 'xlsx')")
       md-tooltip(md-direction="left" md-visible="tooltipVisible" md-autohide="false")
         | SpreadSheet
       i.mdi.mdi-file-excel.mdi-24px
-    md-button.md-fab.md-raised.md-mini.presentation(aria-label="Présentation" ng-click="newDocument('pptx')")
+    md-button.md-fab.md-raised.md-mini.presentation(aria-label="Présentation" ng-click="showPrompt(event, 'pptx')")
       md-tooltip(md-direction="left" md-visible="tooltipVisible" md-autohide="false")
         | Présentation
       i.mdi.mdi-file-powerpoint.mdi-24px

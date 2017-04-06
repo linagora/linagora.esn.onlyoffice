@@ -9,25 +9,30 @@
         gadgetChooser: gadgetChooser
       };
 
-      function gadgetChooser(fileExt) {
+      function gadgetChooser(fileExtension) {
+
+        var extensionSuported = {
+          text: ['docx', 'odt'],
+          spreadsheet: ['xlsx', 'ods'],
+          presentation: ['pptx', 'odp']
+        }
+
         var gadgets = {
            docx: 'http://text-gadget.app.officejs.com/',
            xlsx: 'http://spreadsheet-gadget.app.officejs.com/',
            pptx: 'http://presentation-gadget.app.officejs.com/'
         }
 
-        switch (fileExt) {
-          case 'docx':
-            return gadgets.docx
-            break;
-          case 'xlsx':
-            return gadgets.xlsx
-            break;
-          case 'pptx':
-            return gadgets.pptx
-            break;
-          default:
-            return gadgets.docx;
+        if (extensionSuported.text.includes(fileExtension)) {
+          return gadgets.docx;
+        }
+
+        if(extensionSuported.spreadsheet.includes(fileExtension)) {
+          return gadgets.xlsx;
+        }
+
+        if(extensionSuported.presentation.includes(fileExtension)) {
+          return gadgets.pptx
         }
       }
     }

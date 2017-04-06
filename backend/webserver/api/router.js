@@ -9,9 +9,13 @@ module.exports = function(dependencies, lib, router) {
 
   //router.post('/convertion', controller.convertion);
 
-  router.post('/files/:fileId', fileController.existingFile);
+  router.get('/files/:fileId', fileController.existingFile);
 
-  router.post('/files', fileController.newFile)
+  router.post('/save/files/:fileId/:extFile', fileController.saveModif);
+
+  router.post('/coauthor/files/:fileId', fileController.addCoAuthor);
+
+  router.post('/files', fileController.newFile);
 
   router.get('/files', fileController.getMetaDataByUserId);
 

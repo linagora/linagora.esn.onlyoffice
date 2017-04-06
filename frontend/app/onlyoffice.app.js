@@ -6,6 +6,10 @@
     'ui.router',
     'restangular',
     'mgcrea.ngStrap',
-    'ngMaterial'
+    'ngMaterial',
+    'ngMessages',
+    'esn.dragndrop',
+    'esn.user',
+    'esn.pagination'
   ]);
 })();

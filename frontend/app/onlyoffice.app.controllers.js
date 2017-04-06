@@ -2,19 +2,9 @@
   'use strict';
 
   angular.module('linagora.esn.onlyoffice')
-    .controller('OnlyOfficeIndexController', OnlyOfficeIndexController);
+    .controller('IndexController', OnlyOfficeIndexController);
 
-    function OnlyOfficeIndexController($scope, $state, $modal, fileUploadService, backgroundProcessorService, OnlyOfficeRestangular) {
-
-      //var myModal = $modal({scope: $scope, template: '/onlyoffice/app/modal/nameModal.html', show: false});
-      /*OnlyOfficeRestangular.all('files').getList().then(function(docs) {
-        console.log(docs);
-      })
-
-      $scope.showModal = function() {
-        myModal.$promise.then(myModal.show);
-      }*/
-
+    function OnlyOfficeIndexController($scope, $state, fileUploadService, backgroundProcessorService) {
       $scope.onFileSelect = function(file) {
         // Get the uploaderService
         var uploadService = fileUploadService.get();

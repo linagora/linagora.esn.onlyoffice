@@ -14,7 +14,7 @@ module.exports = function(dependencies) {
     client.methodCall('convertFile',
         [options.data,
          options.source || 'docx',
-         options.destination || 'docx',
+         options.destination || 'docy',
          options.zip || false,
          options.refresh || false,
          options.conversion_kw || {}],

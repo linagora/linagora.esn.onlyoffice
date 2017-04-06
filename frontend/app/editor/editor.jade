@@ -1,18 +1,6 @@
 script(src='/onlyoffice/js/rsvp-2.0.4.js')
 script(src='/onlyoffice/js/renderjs-latest.js')
 script(src='/onlyoffice/js/jio.js')
-style.
-  .iframe {
-    margin:0;
-    padding:0;
-    width:100%;
-    height:100%;
-  }
-  iframe {
-    width: 100%;
-    height: 100%;
-  }
-  .container-fluid {
-    height: 700px !important
-  }
-div.iframe
+div(ng-show='!isload')
+  .text-center(openpaas-logo-spinner, spinner-start-active='1', spinner-size='0.5')
+onlyoffice-editor(file-extension='fileExtension', ng-show="isload")

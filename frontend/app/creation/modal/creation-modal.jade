@@ -1,0 +1,12 @@
+md-dialog._md.md-default-theme.md-transition-in(md-theme="default" aria-label="File name" ng-class="dialog.css" role="dialog" tabindex="-1" aria-describedby="dialogContent_16")
+  md-dialog-content.md-dialog-content(role="document" tabindex="-1" id="dialogContent_16")
+    h2.md-title Nom du Fichier
+    md-input-container.md-prompt-input-container.md-input-has-placeholder.md-default-theme.md-input-has-value
+      input.md-autofocus.md-input(ng-model='filename' md-autofocus placeholder="File name" class="" aria-label="File name" id="input_1" aria-invalid="false")
+      .md-errors-spacer
+  md-dialog-actions
+    button.md-primary.md-cancel-button.md-button.md-default-theme.md-ink-ripple(type="button" ng-click="cancel()")
+      span Annuler
+      .md-ripple-container
+    button.md-primary.md-confirm-button.md-button.md-ink-ripple.md-default-theme(type="button" ng-click="confirm()")
+      span Ok

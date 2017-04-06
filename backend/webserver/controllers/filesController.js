@@ -2,20 +2,41 @@
 
 module.exports = function(dependencies, lib) {
   const filestore = dependencies('filestore');
+  const emailSender = require('./emailSender').sharedDocument(dependencies, lib);
   const utils = require('./utils')(dependencies, lib);
   const fs = require('fs');
   const path = require('path');
+  const stream = require('stream');
   const ObjectId = require('mongoose').Types.ObjectId;
   const moment = require('moment');
+  const _ = require('lodash');
 
   return {
     newFile: newFile,
     existingFile: existingFile,
     getMetaDataByUserId: getMetaDataByUserId,
-    removeFile: removeFile
+    removeFile: removeFile,
+    saveModif: saveModif,
+    addCoAuthor: addCoAuthor
   };
 
-  // Cette fonction doit maintenant servir lors de la creation d'un nouveaux document
+  function convertion(options, callback) {
+    lib.convertion.convertionWithCloudoo(options, function(err, result) {
+      if (err) {
+        callback(err, null);
+      }
+      options.source = options.destination;
+      options.destination = utils.destinationFromSourceExt(options.source);
+
+      if (options.destination) {
+        options.data = result;
+        convertion(options, callback);
+      } else {
+        callback(null, result);
+      }
+    });
+  }
+
   function newFile(req, res) {
     //TODO create a new file in mongodb via filestore
     //TODO After link the file with the user who sent the request
@@ -55,6 +76,7 @@ module.exports = function(dependencies, lib) {
   function existingFile(req, res) {
 
     var options = {};
+    var decodedFile;
     //TODO link the file with the user who sent the request
     filestore.get(req.params.fileId, function(err, fileMeta, readStream) {
       if (err) {
@@ -79,7 +101,8 @@ module.exports = function(dependencies, lib) {
         options.data = options.data.toString('base64');
         options.source = fileMeta.filename.split(".").pop();
         options.destination = utils.destinationFromSourceExt(options.source);
-        lib.convertion.convertionWithCloudoo(options, function(err, result) {
+
+        convertion(options, function (err, result) {
           if(err) {
             res.status(500).json({
               error: {
@@ -89,12 +112,11 @@ module.exports = function(dependencies, lib) {
               }
             });
           }
-          var decodedFile = Buffer.from(result, 'base64');
+          decodedFile = Buffer.from(result, 'base64');
           res.writeHead(200);
           res.end(decodedFile);
-        });
+        })
       });
-
     });
   }
 
@@ -133,6 +155,109 @@ module.exports = function(dependencies, lib) {
       }
       res.status(204).end();
     })
+  }
+
+  function saveModif(req, res) {
+    var options = {};
+
+    req.on('data', function(data) {
+      if(options.data) {
+        options.data = Buffer.concat([options.data, data])
+      } else {
+        options.data = data;
+      }
+    });
+
+    req.on('end', function() {
+      filestore.getMeta(req.params.fileId, function(err, fileMeta) {
+        if(err) {
+          res.status(500).json({
+            error: {
+              code: 500,
+              message: 'Error when retrieving document\'s metadata',
+              detail: err
+            }
+          });
+        }
+
+        //options.data = options.data.toString('base64');
+        options.source = req.params.extFile.replace(/x$/, 'y');
+        options.destination = req.params.extFile;
+
+        console.log(options);
+
+        /*lib.convertion.convertionWithCloudoo(options, function(err, result) {
+          if(err) {
+            res.status(500).json({
+              error: {
+                code: 500,
+                message: 'Error when converting document',
+                detail: err.error
+              }
+            });
+          }
+
+          filestore.delete(req.params.fileId, function(err) {
+            if(err) {
+              res.status(500).json({
+                error: {
+                  code: 500,
+                  message: 'Error when deleting document',
+                  detail: err
+                }
+              });
+            }
+
+            var fileOptions = {}
+            fileOptions.filename = fileMeta.filename;
+
+            var fileStream = stream.PassThrough();
+            fileStream.end(Buffer.from(result, 'base64'));
+
+            filestore.store(req.params.fileId, fileMeta.contentType, fileMeta.metadata, fileStream, fileOptions, function(err, saved) {
+              if(err) {
+                res.status(500).json({
+                  error: {
+                    code: 500,
+                    message: 'Error when saving document modification',
+                    detail: err
+                  }
+                });
+              }
+              res.status(204).end();
+            });
+          });
+        });*/
+      });
+    });
+  }
+
+  function addCoAuthor(req, res) {
+    var query = {
+      metadata: {
+        coAuthor: []
+      }
+    };
+
+    var usersEmail = [];
+
+    query.metadata.coAuthor = _.map(req.body, function (user) {
+      usersEmail.push(user.preferredEmail);
+      return new ObjectId(user._id);
+    });
+
+    filestore.addMeta(req.params.fileId, query, function (err, result) {
+      if (err) {
+        res.status(500).json({
+          error: {
+            code: 500,
+            message: 'Error when saving document coAuthor',
+            detail: err
+          }
+        });
+      }
+      res.status(200).json(result);
+    });
   }
 
 }

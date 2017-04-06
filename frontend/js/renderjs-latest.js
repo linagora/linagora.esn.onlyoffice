@@ -2240,8 +2240,9 @@ if (typeof document.contains !== 'function') {
             for (i = 0; i < css_list.length; i += 1) {
               stylesheet_registration_dict[css_list[i]] = null;
             }
-            gadget_loading_klass_list.shift();
+            //gadget_loading_klass_list.shift();
           }).then(function () {
+
             // select the target node
             var target = document.querySelector('body'),
               // create an observer instance
@@ -2317,7 +2318,6 @@ if (typeof document.contains !== 'function') {
       }
       document.addEventListener('DOMContentLoaded',
                                 bootstrap_deferred_object.resolve, false);
-
       // Return Promies/Queue here instead of directly calling init()
       return new RSVP.Queue()
         .push(function () {

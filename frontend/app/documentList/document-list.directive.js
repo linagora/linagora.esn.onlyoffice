@@ -7,7 +7,6 @@
   function documentListComponent() {
     let component = {
       retrict: 'E',
-      scope: {},
       templateUrl: '/onlyoffice/app/documentList/document-list.html',
       controller: 'documentListController'
     };
