@@ -16,6 +16,12 @@ module.exports = function(dependencies, lib) {
     'ppty': false
   };
 
+  var sourceWithDestination = {
+    docy: ['docx', 'odt'],
+    xlsy: ['xlsx', 'ods'],
+    ppty: ['pptx', 'odp'],
+  }
+
   var MimeDocumentApplication = [
     'application/pdf',
     'application/vnd.oasis.opendocument.text',
@@ -26,10 +32,30 @@ module.exports = function(dependencies, lib) {
     'application/vnd.openxmlformats-officedocument.presentationml.presentation'
   ];
 
-  return {
-    fileIsEditorDocument: fileIsEditorDocument,
-    destinationFromSourceExt: destinationFromSourceExt
-  };
+
+  function sourceToDestination(destination) {
+    if (sourceWithDestination.docy.includes(destination)) {
+      return 'docy';
+    }
+    if (sourceWithDestination.xlsy.includes(destination)) {
+      return 'xlsy';
+    }
+    if (sourceWithDestination.ppty.includes(destination)) {
+      return 'ppty';
+    }
+  }
+
+  function opentDocumentToOffice(ext) {
+    if (ext === 'odt' ) {
+      return 'docx';
+    }
+    if (ext === 'ods') {
+      return 'xlsx';
+    }
+    if (ext === 'odp') {
+      return 'pptx';
+    }
+  }
 
   function fileIsEditorDocument(contentType) {
     return MimeDocumentApplication.includes(contentType);
@@ -39,4 +65,10 @@ module.exports = function(dependencies, lib) {
     return destinationExtensionExport[extension];
   }
 
+  return {
+    fileIsEditorDocument: fileIsEditorDocument,
+    destinationFromSourceExt: destinationFromSourceExt,
+    sourceToDestination: sourceToDestination,
+    opentDocumentToOffice: opentDocumentToOffice
+  };
 }

@@ -2,17 +2,19 @@
   margin:0;
   padding:0;
   width:100vw;
-  height:92vh;
+  height: ~"calc(100vh - @{header-height} - 3px)";
+
+  @media (min-width: @screen-md-min) {
+    height: ~"calc(100vh - @{header-height-md} - 3px)";
+  }
+
+  @media (min-width: @screen-xl-min) {
+    height: ~"calc(100vh - @{header-height-xl} - 3px)";
+  }
 }
 iframe {
   width: 100%;
   height: 100%;
-}
-.container-fluid {
-  height: 91vh !important;
-  min-height: auto;
-  padding-left: 0;
-  padding-right: 0;
 }
 .try-editor-list {
     list-style: none;

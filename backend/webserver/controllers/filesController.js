@@ -159,6 +159,8 @@ module.exports = function(dependencies, lib) {
 
   function saveModif(req, res) {
     var options = {};
+    var defaultExt = ['docx', 'xlsx', 'pptx'];
+    var fileExt = req.params.extFile;
 
     req.on('data', function(data) {
       if(options.data) {
@@ -180,13 +182,31 @@ module.exports = function(dependencies, lib) {
           });
         }
 
-        //options.data = options.data.toString('base64');
-        options.source = req.params.extFile.replace(/x$/, 'y');
+        options.data = options.data.toString('base64');
+        options.source = utils.sourceToDestination(req.params.extFile)
         options.destination = req.params.extFile;
 
-        console.log(options);
+        if (!defaultExt.includes(options.destination)) {
+          console.log("Not open doc");
+          console.log(options.destination);
+          options.destination = utils.opentDocumentToOffice(options.destination)
+          lib.convertion.convertionWithCloudoo(options, function(err, result) {
+            if (err) {
+              res.status(500).json({
+                error: {
+                  code: 500,
+                  message: 'Error when converting document',
+                  detail: err.error
+                }
+              });
+            }
+            options.data = result;
+            options.source = options.destination;
+            options.destination = req.params.extFile;
+          });
+        }
 
-        /*lib.convertion.convertionWithCloudoo(options, function(err, result) {
+        lib.convertion.convertionWithCloudoo(options, function(err, result) {
           if(err) {
             res.status(500).json({
               error: {
@@ -196,6 +216,7 @@ module.exports = function(dependencies, lib) {
               }
             });
           }
+
 
           filestore.delete(req.params.fileId, function(err) {
             if(err) {
@@ -227,7 +248,7 @@ module.exports = function(dependencies, lib) {
               res.status(204).end();
             });
           });
-        });*/
+        });
       });
     });
   }
@@ -256,7 +277,26 @@ module.exports = function(dependencies, lib) {
           }
         });
       }
-      res.status(200).json(result);
+
+      emailSender.sendEmail({
+        data: {
+          email: usersEmail,
+          userSender: req.user,
+          fileShared: result.value
+        }
+      }, function (err, ok) {
+        if (err) {
+          console.log(err);
+          res.status(500).json({
+            error: {
+              code: 500,
+              message: 'Error when sending mail',
+              detail: err
+            }
+          });
+        }
+        res.status(200).json(result);
+      });
     });
   }
 
