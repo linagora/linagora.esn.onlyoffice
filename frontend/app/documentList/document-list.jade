@@ -11,8 +11,8 @@ table.table
       tr(ng-repeat="document in elements track by $index" ng-if="elements.length > 0")
         td {{$index + 1}}
         td {{document.filename}}
-        td {{formatDate(document.uploadDate)}}
-        td {{document.length | byte}}
+        td {{document.uploadDate | date : 'medium'}}
+        td {{document.length | bytes}}
         td
           a.md-icon-button.md-button.md-ink-ripple(ng-href="/onlyoffice/editor/{{getExtensionfromFileName(document.filename)}}/{{document._id}}", target="_blank")
             i.mdi.mdi-pencil.mdi-18px

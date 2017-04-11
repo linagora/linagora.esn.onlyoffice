@@ -10,6 +10,7 @@ module.exports = function(dependencies, lib) {
   const ObjectId = require('mongoose').Types.ObjectId;
   const moment = require('moment');
   const _ = require('lodash');
+  const url = require('url');
 
   return {
     newFile: newFile,
@@ -278,11 +279,18 @@ module.exports = function(dependencies, lib) {
         });
       }
 
+      var FileExtension = result.value.filename.split(".").pop();
       emailSender.sendEmail({
         data: {
           email: usersEmail,
           userSender: req.user,
-          fileShared: result.value
+          fileExt: FileExtension,
+          fileShared: result.value,
+          fileUrl: url.format({
+                    protocol: req.protocol,
+                    host: req.get('host'),
+                    pathname: '#/onlyoffice/editor/'+ FileExtension + '/' + req.params.fileId
+                  })
         }
       }, function (err, ok) {
         if (err) {
