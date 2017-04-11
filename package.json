@@ -1,7 +1,7 @@
 {
-  "name": "esn.helloworld",
+  "name": "linagora.esn.onlyoffice",
   "version": "0.0.1",
-  "description": "OpenPaaS generic module template",
+  "description": "OpenPaaS document editor",
   "main": "index.js",
   "devDependencies": {
     "chai": "3.4.0",
@@ -33,7 +33,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://ci.open-paas.org/stash/scm/om/esn.helloworld.git"
+    "url": "https://akhouaji@ci.open-paas.org/stash/scm/~akhouaji/linagora.esn.onlyoffice.git"
   },
   "author": "Linagora R&D",
   "license": "AGPLv3",
@@ -42,7 +42,6 @@
     "awesome-module": "1.0.0",
     "body-parser": "~1.8.1",
     "bower": "1.7.0",
-    "debug": "~2.0.0",
     "ejs": "~1.0.0",
     "express": "4.13.3",
     "formidable": "~1.0.16",
