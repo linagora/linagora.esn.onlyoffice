@@ -24,10 +24,6 @@
         });
       };
 
-      $scope.formatDate = function(date) {
-        return moment(date).format('DD MMMM YYYY HH:mm');
-      }
-
       $scope.showImport = function(type) {
         // Appending dialog to document.body to cover sidenav in docs app
         var newScope = $scope.$new();
