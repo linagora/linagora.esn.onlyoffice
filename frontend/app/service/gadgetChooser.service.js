@@ -18,9 +18,9 @@
         }
 
         var gadgets = {
-           docx: 'http://text-gadget.app.officejs.com/',
-           xlsx: 'http://spreadsheet-gadget.app.officejs.com/',
-           pptx: 'http://presentation-gadget.app.officejs.com/'
+           docx: 'https://text-gadget.app.officejs.com/',
+           xlsx: 'https://spreadsheet-gadget.app.officejs.com/',
+           pptx: 'https://presentation-gadget.app.officejs.com/'
         }
 
         if (extensionSuported.text.includes(fileExtension)) {
