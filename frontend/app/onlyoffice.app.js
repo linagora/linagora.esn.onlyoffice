@@ -10,6 +10,7 @@
     'ngMessages',
     'esn.dragndrop',
     'esn.user',
-    'esn.pagination'
+    'esn.pagination',
+    'esn.notification'
   ]);
 })();

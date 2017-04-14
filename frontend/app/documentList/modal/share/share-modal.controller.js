@@ -4,8 +4,10 @@
   angular.module('linagora.esn.onlyoffice')
     .controller('shareModalController', shareModalController);
 
-    function shareModalController($mdDialog, $scope, _, OnlyOfficeRestangular) {
+    function shareModalController($mdDialog, $scope, _, OnlyOfficeRestangular, notificationFactory) {
       $scope.newUsersGroups = [];
+
+      console.log("LOLOLOLOLOLOLOL");
 
       $scope.cancel = function() {
         $mdDialog.cancel();
@@ -13,8 +15,9 @@
 
       $scope.confirm = function() {
         $mdDialog.hide();
-        var usersId = []
-        OnlyOfficeRestangular.one('coauthor').one('files', $scope.fileId).customPOST($scope.newUsersGroups);
+        OnlyOfficeRestangular.one('coauthor').one('files', $scope.fileId).customPOST($scope.newUsersGroups).then(function () {
+          notificationFactory.weakSuccess('Success', 'Le document a été partagé avec Succès');
+        });
       };
     }
 })();
