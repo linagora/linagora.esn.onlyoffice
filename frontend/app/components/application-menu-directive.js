@@ -8,7 +8,7 @@
     let directive = {
       retrict: 'E',
       replace: true,
-      template: applicationMenuTemplateBuilder('/#/onlyoffice/index', 'mdi-file-document', 'OnlyOffice')
+      template: applicationMenuTemplateBuilder('/#/onlyoffice/index', 'file-document-box', 'OnlyOffice')
     };
 
     return directive;

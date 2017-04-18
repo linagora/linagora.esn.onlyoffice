@@ -294,7 +294,6 @@ module.exports = function(dependencies, lib) {
         }
       }, function (err, ok) {
         if (err) {
-          console.log(err);
           res.status(500).json({
             error: {
               code: 500,

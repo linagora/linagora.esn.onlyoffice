@@ -7,8 +7,6 @@
     function shareModalController($mdDialog, $scope, _, OnlyOfficeRestangular, notificationFactory) {
       $scope.newUsersGroups = [];
 
-      console.log("LOLOLOLOLOLOLOL");
-
       $scope.cancel = function() {
         $mdDialog.cancel();
       };
