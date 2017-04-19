@@ -11,6 +11,7 @@
     'esn.dragndrop',
     'esn.user',
     'esn.pagination',
-    'esn.notification'
+    'esn.notification',
+    'naturalSort'
   ]);
 })();
