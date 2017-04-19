@@ -289,7 +289,7 @@ module.exports = function(dependencies, lib) {
           fileUrl: url.format({
                     protocol: req.protocol,
                     host: req.get('host'),
-                    pathname: '#/onlyoffice/editor/'+ FileExtension + '/' + req.params.fileId
+                    hash: '#/onlyoffice/editor/'+ FileExtension + '/' + req.params.fileId
                   })
         }
       }, function (err, ok) {
