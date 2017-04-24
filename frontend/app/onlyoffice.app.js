@@ -12,6 +12,7 @@
     'esn.user',
     'esn.pagination',
     'esn.notification',
-    'naturalSort'
+    'naturalSort',
+    'angularFileUpload'
   ]);
 })();
