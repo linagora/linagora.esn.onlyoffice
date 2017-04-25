@@ -24,10 +24,11 @@
         });
       };
 
-      $scope.showImport = function(type) {
+      $scope.showImport = function(type, document) {
         // Appending dialog to document.body to cover sidenav in docs app
         var newScope = $scope.$new();
         newScope.type = type;
+        newScope.doc = document;
         $mdDialog.show({
           controller: 'importModalController',
           templateUrl: '/onlyoffice/app/documentList/modal/import/import-modal.html',

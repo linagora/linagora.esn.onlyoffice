@@ -101,7 +101,11 @@ module.exports = function(dependencies, lib) {
       readStream.on('end', function() {
         options.data = options.data.toString('base64');
         options.source = fileMeta.filename.split(".").pop();
-        options.destination = utils.destinationFromSourceExt(options.source);
+        if (req.query.destination) {
+          options.destination = req.query.destination
+        } else {
+          options.destination = utils.destinationFromSourceExt(options.source);
+        }
 
         convertion(options, function (err, result) {
           if(err) {
