@@ -17,8 +17,8 @@ table.table
           a.md-icon-button.md-button.md-ink-ripple(ng-href="#/onlyoffice/editor/{{getExtensionfromFileName(document.filename)}}/{{document._id}}", target="_blank")
             i.mdi.mdi-pencil.mdi-18px
             //- ui-sref="editor({fileExt: getExtensionfromFileName(document.filename), fileId: document._id})" 
-          button.md-icon-button.md-button.md-ink-ripple()
-            i.mdi.mdi-download.mdi-18px(ng-click="showImport(getExtensionfromFileName(document.filename), document)")
+          button.md-icon-button.md-button.md-ink-ripple(ng-click="showImport(getExtensionfromFileName(document.filename), document)")
+            i.mdi.mdi-download.mdi-18px
           button.md-icon-button.md-button.md-ink-ripple(ng-if="document.metadata.creator.id == userId" ng-click="removeDocument(document)")
             i.mdi.mdi-delete.mdi-18px
           button.md-icon-button.md-button.md-ink-ripple(ng-if="document.metadata.creator.id == userId" ng-click="showShare(document._id)")
