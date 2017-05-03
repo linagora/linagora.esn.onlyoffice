@@ -26,10 +26,11 @@ module.exports = function(dependencies, lib) {
       if (err) {
         callback(err, null);
       }
+
       options.source = options.destination;
       options.destination = utils.destinationFromSourceExt(options.source);
 
-      if (options.destination) {
+      if (options.destination && options.toOnlyOfficeFormat) {
         options.data = result;
         convertion(options, callback);
       } else {
@@ -75,7 +76,6 @@ module.exports = function(dependencies, lib) {
 
 
   function existingFile(req, res) {
-
     var options = {};
     var decodedFile;
     //TODO link the file with the user who sent the request
@@ -101,7 +101,9 @@ module.exports = function(dependencies, lib) {
       readStream.on('end', function() {
         options.data = options.data.toString('base64');
         options.source = fileMeta.filename.split(".").pop();
+        options.toOnlyOfficeFormat = true;
         if (req.query.destination) {
+          options.toOnlyOfficeFormat = false;
           options.destination = req.query.destination
         } else {
           options.destination = utils.destinationFromSourceExt(options.source);
