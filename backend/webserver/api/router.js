@@ -13,6 +13,8 @@ module.exports = function(dependencies, lib, router) {
 
   router.post('/save/files/:fileId/:extFile', authorizationMW.requiresAPILogin, fileController.saveModif);
 
+  router.post('/import/file/:filename/:mimetype', authorizationMW.requiresAPILogin, fileController.importFile);
+
   router.post('/coauthor/files/:fileId', authorizationMW.requiresAPILogin, fileController.addCoAuthor);
 
   router.post('/files', authorizationMW.requiresAPILogin, fileController.newFile);

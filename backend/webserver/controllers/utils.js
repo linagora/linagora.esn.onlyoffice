@@ -57,6 +57,18 @@ module.exports = function(dependencies, lib) {
     }
   }
 
+  function officeToOpenDocument(ext) {
+    if (ext === 'docx' ) {
+      return 'odt';
+    }
+    if (ext === 'xlsx') {
+      return 'ods';
+    }
+    if (ext === 'pptx') {
+      return 'odp';
+    }
+  }
+
   function fileIsEditorDocument(contentType) {
     return MimeDocumentApplication.includes(contentType);
   }
@@ -69,6 +81,7 @@ module.exports = function(dependencies, lib) {
     fileIsEditorDocument: fileIsEditorDocument,
     destinationFromSourceExt: destinationFromSourceExt,
     sourceToDestination: sourceToDestination,
-    opentDocumentToOffice: opentDocumentToOffice
+    opentDocumentToOffice: opentDocumentToOffice,
+    officeToOpenDocument: officeToOpenDocument
   };
 }

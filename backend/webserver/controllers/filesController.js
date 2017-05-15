@@ -18,23 +18,33 @@ module.exports = function(dependencies, lib) {
     getMetaDataByUserId: getMetaDataByUserId,
     removeFile: removeFile,
     saveModif: saveModif,
-    addCoAuthor: addCoAuthor
+    addCoAuthor: addCoAuthor,
+    importFile: importFile
   };
 
   function convertion(options, callback) {
     lib.convertion.convertionWithCloudoo(options, function(err, result) {
       if (err) {
-        callback(err, null);
+        return callback(err, null);
       }
 
       options.source = options.destination;
-      options.destination = utils.destinationFromSourceExt(options.source);
+      options.data = result;
 
-      if (options.destination && options.toOnlyOfficeFormat) {
-        options.data = result;
+      if (options.toOnlyOfficeFormat) {
+        options.destination = utils.destinationFromSourceExt(options.source);
+        if(options.destination) {
+          options.toOnlyOfficeFormat = false;
+          convertion(options, callback);
+        } else {
+          callback(null, result);
+        }
+      } else if (options.toOpenDocument) {
+        options.destination = utils.officeToOpenDocument(options.source);
+        options.toOpenDocument = false;
         convertion(options, callback);
       } else {
-        callback(null, result);
+        return callback(null, result);
       }
     });
   }
@@ -61,7 +71,7 @@ module.exports = function(dependencies, lib) {
 
      filestore.store(fileId, req.body.mimetype, metadata, readStream, options, function(err, saved) {
        if (err) {
-         res.status(500).json({
+         return res.status(500).json({
            error: {
              code: 500,
              message: 'Error when saving file',
@@ -70,7 +80,19 @@ module.exports = function(dependencies, lib) {
          });
        }
 
-       res.status(201).json({_id: saved._id});
+       lib.document.UpdateOrCreate([req.user._id], fileId, function (err, doc) {
+         if (err) {
+           return res.status(500).json({
+             error: {
+               code: 500,
+               message: 'Error when saving file',
+               detail: err
+             }
+           });
+         }
+
+         return res.status(201).json({_id: saved._id});
+       });
      });
   };
 
@@ -81,7 +103,7 @@ module.exports = function(dependencies, lib) {
     //TODO link the file with the user who sent the request
     filestore.get(req.params.fileId, function(err, fileMeta, readStream) {
       if (err) {
-        res.status(500).json({
+        return res.status(500).json({
           error: {
             code: 500,
             message: 'Error when retrieving file',
@@ -111,7 +133,7 @@ module.exports = function(dependencies, lib) {
 
         convertion(options, function (err, result) {
           if(err) {
-            res.status(500).json({
+            return res.status(500).json({
               error: {
                 code: 500,
                 message: 'Error when converting document',
@@ -119,19 +141,19 @@ module.exports = function(dependencies, lib) {
               }
             });
           }
+
           decodedFile = Buffer.from(result, 'base64');
-          res.writeHead(200);
-          res.end(decodedFile);
-        })
+
+          return res.status(200).end(decodedFile);
+        });
       });
     });
   }
 
   function getMetaDataByUserId(req, res) {
-    var documentMeta = [];
-    filestore.getAllMetaByUserId(req.user._id, req.query, function(err, metas) {
+    lib.document.getDocumentsByUserID(req.user._id, function(err, doc) {
       if(err) {
-        res.status(500).json({
+        return res.status(500).json({
           error: {
             code: 500,
             message: 'Error when retrieving metadata',
@@ -139,20 +161,19 @@ module.exports = function(dependencies, lib) {
           }
         });
       }
-      metas.map(function(meta) {
-        if (utils.fileIsEditorDocument(meta.contentType)) {
-          return documentMeta.push(meta);
-        }
-      });
 
-      res.status(200).json(documentMeta);
+      if (doc.length === 0) {
+        return res.status(200).json([]);
+      }
+
+      return res.status(200).json(doc[0].documents);
     });
   }
 
   function removeFile(req, res) {
     filestore.delete(req.params.fileId, function(err) {
       if(err) {
-        res.status(500).json({
+        return res.status(500).json({
           error: {
             code: 500,
             message: 'Error when deleting document',
@@ -160,14 +181,28 @@ module.exports = function(dependencies, lib) {
           }
         });
       }
-      res.status(204).end();
-    })
+
+      lib.document.remove(req.params.fileId, function(err) {
+        if(err) {
+          return res.status(500).json({
+            error: {
+              code: 500,
+              message: 'Error when deleting document',
+              detail: err
+            }
+          });
+        }
+        return res.status(204).end();
+      });
+    });
   }
 
   function saveModif(req, res) {
     var options = {};
     var defaultExt = ['docx', 'xlsx', 'pptx'];
     var fileExt = req.params.extFile;
+    var fileOptions = {};
+    var fileStream = stream.PassThrough();
 
     req.on('data', function(data) {
       if(options.data) {
@@ -180,7 +215,7 @@ module.exports = function(dependencies, lib) {
     req.on('end', function() {
       filestore.getMeta(req.params.fileId, function(err, fileMeta) {
         if(err) {
-          res.status(500).json({
+          return res.status(500).json({
             error: {
               code: 500,
               message: 'Error when retrieving document\'s metadata',
@@ -194,40 +229,14 @@ module.exports = function(dependencies, lib) {
         options.destination = req.params.extFile;
 
         if (!defaultExt.includes(options.destination)) {
-          console.log("Not open doc");
-          console.log(options.destination);
           options.destination = utils.opentDocumentToOffice(options.destination)
-          lib.convertion.convertionWithCloudoo(options, function(err, result) {
-            if (err) {
-              res.status(500).json({
-                error: {
-                  code: 500,
-                  message: 'Error when converting document',
-                  detail: err.error
-                }
-              });
-            }
-            options.data = result;
-            options.source = options.destination;
-            options.destination = req.params.extFile;
-          });
+          options.toOpenDocument = true;
         }
 
-        lib.convertion.convertionWithCloudoo(options, function(err, result) {
-          if(err) {
-            res.status(500).json({
-              error: {
-                code: 500,
-                message: 'Error when converting document',
-                detail: err.error
-              }
-            });
-          }
-
-
+        convertion(options, function (err, result) {
           filestore.delete(req.params.fileId, function(err) {
             if(err) {
-              res.status(500).json({
+              return res.status(500).json({
                 error: {
                   code: 500,
                   message: 'Error when deleting document',
@@ -236,15 +245,13 @@ module.exports = function(dependencies, lib) {
               });
             }
 
-            var fileOptions = {}
             fileOptions.filename = fileMeta.filename;
 
-            var fileStream = stream.PassThrough();
             fileStream.end(Buffer.from(result, 'base64'));
 
             filestore.store(req.params.fileId, fileMeta.contentType, fileMeta.metadata, fileStream, fileOptions, function(err, saved) {
               if(err) {
-                res.status(500).json({
+                return res.status(500).json({
                   error: {
                     code: 500,
                     message: 'Error when saving document modification',
@@ -252,7 +259,8 @@ module.exports = function(dependencies, lib) {
                   }
                 });
               }
-              res.status(204).end();
+
+              return res.status(204).end();
             });
           });
         });
@@ -261,22 +269,17 @@ module.exports = function(dependencies, lib) {
   }
 
   function addCoAuthor(req, res) {
-    var query = {
-      metadata: {
-        coAuthor: []
-      }
-    };
+    var usersEmail = [],
+        usersID = [];
 
-    var usersEmail = [];
-
-    query.metadata.coAuthor = _.map(req.body, function (user) {
+    usersID = _.map(req.body, function (user) {
       usersEmail.push(user.preferredEmail);
       return new ObjectId(user._id);
     });
 
-    filestore.addMeta(req.params.fileId, query, function (err, result) {
+    lib.document.UpdateOrCreate(usersID, req.params.fileId, function (err, result) {
       if (err) {
-        res.status(500).json({
+        return res.status(500).json({
           error: {
             code: 500,
             message: 'Error when saving document coAuthor',
@@ -285,13 +288,15 @@ module.exports = function(dependencies, lib) {
         });
       }
 
-      var FileExtension = result.value.filename.split(".").pop();
+      result.document = result.document.toObject();
+
+      var FileExtension = result.document.filename.split(".").pop();
       emailSender.sendEmail({
         data: {
           email: usersEmail,
           userSender: req.user,
           fileExt: FileExtension,
-          fileShared: result.value,
+          fileShared: result.document,
           fileUrl: url.format({
                     protocol: req.protocol,
                     host: req.get('host'),
@@ -300,7 +305,7 @@ module.exports = function(dependencies, lib) {
         }
       }, function (err, ok) {
         if (err) {
-          res.status(500).json({
+          return res.status(500).json({
             error: {
               code: 500,
               message: 'Error when sending mail',
@@ -308,7 +313,68 @@ module.exports = function(dependencies, lib) {
             }
           });
         }
-        res.status(200).json(result);
+
+        return res.status(200).json(result);
+      });
+    });
+  }
+
+  function importFile(req, res) {
+    var file = '';
+    var fileId = new ObjectId();
+    var options = {};
+    var metadata = {};
+    var fileStream = stream.PassThrough();
+    var mimetype;
+
+    req.on('data', function(data) {
+      if(file) {
+        file = Buffer.concat([file, data])
+      } else {
+        file = data;
+      }
+    });
+
+    req.on('end', function() {
+      fileStream.end(file);
+
+      if (req.params.filename) {
+        options.filename = req.params.filename;
+      }
+      else {
+        options.filename = moment().format('MMMM Do YYYY, h:mm:ss');
+      }
+
+      if (req.user) {
+        metadata.creator = {objectType: 'user', id: req.user._id};
+      }
+
+      mimetype = 'application/' + req.params.mimetype;
+
+      filestore.store(fileId, mimetype, metadata, fileStream, options, function(err, saved) {
+        if (err) {
+          return res.status(500).json({
+            error: {
+              code: 500,
+              message: 'Error when saving file',
+              detail: err
+            }
+          });
+        }
+
+        lib.document.UpdateOrCreate([req.user._id], fileId, function (err, doc) {
+          if (err) {
+            return res.status(500).json({
+              error: {
+                code: 500,
+                message: 'Error when saving file',
+                detail: err
+              }
+            });
+          }
+
+          return res.status(201).json(saved);
+        });
       });
     });
   }
