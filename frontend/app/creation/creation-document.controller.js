@@ -77,23 +77,19 @@
       });
 
       function fileUpload(file) {
-        // Get the uploaderService
-        var uploadService = fileUploadService.get();
+        var mimetype = file[0].type.split('/').pop();
 
-        // Add the file in the Queue and start the upload
-        var taskOpenFile = uploadService.addFile(file[0], true);
-
-        if (uploadService.isComplete()) {
-          goEditor(taskOpenFile);
-        } else {
-          backgroundProcessorService.add(uploadService.await(goEditor));
-        }
+        OnlyOfficeRestangular.one('import/file/' + file[0].name + '/' + mimetype)
+          .withHttpConfig({transformRequest: angular.identity})
+          .customPOST(file[0], '', undefined, {'Content-Type': file[0].type}).then(function (document) {
+            goEditor(document.data);
+          });
       };
 
-      function goEditor(task) {
-        var extension = task[0].file.name.split(".").pop();
-        var fileid = task[0].response.data._id;
-        $state.go('editor', {'fileExt': extension, 'fileId': fileid});
+      function goEditor(document) {
+        var extension = document.filename.split(".").pop();
+        var fileId = document._id;
+        $state.go('editor', {'fileExt': extension, 'fileId': fileId});
       }
 
     }
