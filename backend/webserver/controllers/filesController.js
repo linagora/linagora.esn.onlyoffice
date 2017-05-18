@@ -3,7 +3,7 @@
 module.exports = function(dependencies, lib) {
   const filestore = dependencies('filestore');
   const emailSender = require('./emailSender').sharedDocument(dependencies, lib);
-  const utils = require('./utils')(dependencies, lib);
+  const utils = require('./utils')();
   const fs = require('fs');
   const path = require('path');
   const stream = require('stream');
@@ -11,16 +11,6 @@ module.exports = function(dependencies, lib) {
   const moment = require('moment');
   const _ = require('lodash');
   const url = require('url');
-
-  return {
-    newFile: newFile,
-    existingFile: existingFile,
-    getMetaDataByUserId: getMetaDataByUserId,
-    removeFile: removeFile,
-    saveModif: saveModif,
-    addCoAuthor: addCoAuthor,
-    importFile: importFile
-  };
 
   function convertion(options, callback) {
     lib.convertion.convertionWithCloudoo(options, function(err, result) {
@@ -33,7 +23,7 @@ module.exports = function(dependencies, lib) {
 
       if (options.toOnlyOfficeFormat) {
         options.destination = utils.destinationFromSourceExt(options.source);
-        if(options.destination) {
+        if (options.destination) {
           options.toOnlyOfficeFormat = false;
           convertion(options, callback);
         } else {
@@ -50,8 +40,6 @@ module.exports = function(dependencies, lib) {
   }
 
   function newFile(req, res) {
-    //TODO create a new file in mongodb via filestore
-    //TODO After link the file with the user who sent the request
     var extension = path.extname(req.body.name);
     var readStream = fs.createReadStream(path.normalize(__dirname + '/sampleFile/sample' + extension));
     var fileId = new ObjectId();
@@ -60,8 +48,7 @@ module.exports = function(dependencies, lib) {
 
     if (req.body.name) {
       options.filename = req.body.name;
-    }
-    else {
+    } else {
       options.filename = moment().format('MMMM Do YYYY, h:mm:ss');
     }
 
@@ -80,7 +67,7 @@ module.exports = function(dependencies, lib) {
          });
        }
 
-       lib.document.UpdateOrCreate([req.user._id], fileId, function (err, doc) {
+       lib.document.UpdateOrCreate([req.user._id], saved._id, function(err, doc) {
          if (err) {
            return res.status(500).json({
              error: {
@@ -91,16 +78,15 @@ module.exports = function(dependencies, lib) {
            });
          }
 
-         return res.status(201).json({_id: saved._id});
+         return res.status(201).json({_id: doc.document._id});
        });
      });
-  };
-
+  }
 
   function existingFile(req, res) {
     var options = {};
     var decodedFile;
-    //TODO link the file with the user who sent the request
+
     filestore.get(req.params.fileId, function(err, fileMeta, readStream) {
       if (err) {
         return res.status(500).json({
@@ -122,17 +108,17 @@ module.exports = function(dependencies, lib) {
 
       readStream.on('end', function() {
         options.data = options.data.toString('base64');
-        options.source = fileMeta.filename.split(".").pop();
+        options.source = fileMeta.filename.split('.').pop();
         options.toOnlyOfficeFormat = true;
         if (req.query.destination) {
           options.toOnlyOfficeFormat = false;
-          options.destination = req.query.destination
+          options.destination = req.query.destination;
         } else {
           options.destination = utils.destinationFromSourceExt(options.source);
         }
 
-        convertion(options, function (err, result) {
-          if(err) {
+        convertion(options, function(err, result) {
+          if (err) {
             return res.status(500).json({
               error: {
                 code: 500,
@@ -152,7 +138,7 @@ module.exports = function(dependencies, lib) {
 
   function getMetaDataByUserId(req, res) {
     lib.document.getDocumentsByUserID(req.user._id, function(err, doc) {
-      if(err) {
+      if (err) {
         return res.status(500).json({
           error: {
             code: 500,
@@ -172,7 +158,7 @@ module.exports = function(dependencies, lib) {
 
   function removeFile(req, res) {
     filestore.delete(req.params.fileId, function(err) {
-      if(err) {
+      if (err) {
         return res.status(500).json({
           error: {
             code: 500,
@@ -183,7 +169,7 @@ module.exports = function(dependencies, lib) {
       }
 
       lib.document.remove(req.params.fileId, function(err) {
-        if(err) {
+        if (err) {
           return res.status(500).json({
             error: {
               code: 500,
@@ -192,6 +178,7 @@ module.exports = function(dependencies, lib) {
             }
           });
         }
+
         return res.status(204).end();
       });
     });
@@ -200,13 +187,12 @@ module.exports = function(dependencies, lib) {
   function saveModif(req, res) {
     var options = {};
     var defaultExt = ['docx', 'xlsx', 'pptx'];
-    var fileExt = req.params.extFile;
     var fileOptions = {};
     var fileStream = stream.PassThrough();
 
     req.on('data', function(data) {
-      if(options.data) {
-        options.data = Buffer.concat([options.data, data])
+      if (options.data) {
+        options.data = Buffer.concat([options.data, data]);
       } else {
         options.data = data;
       }
@@ -214,7 +200,7 @@ module.exports = function(dependencies, lib) {
 
     req.on('end', function() {
       filestore.getMeta(req.params.fileId, function(err, fileMeta) {
-        if(err) {
+        if (err) {
           return res.status(500).json({
             error: {
               code: 500,
@@ -225,17 +211,17 @@ module.exports = function(dependencies, lib) {
         }
 
         options.data = options.data.toString('base64');
-        options.source = utils.sourceToDestination(req.params.extFile)
+        options.source = utils.sourceToDestination(req.params.extFile);
         options.destination = req.params.extFile;
 
         if (!defaultExt.includes(options.destination)) {
-          options.destination = utils.opentDocumentToOffice(options.destination)
+          options.destination = utils.opentDocumentToOffice(options.destination);
           options.toOpenDocument = true;
         }
 
-        convertion(options, function (err, result) {
+        convertion(options, function(err, result) {
           filestore.delete(req.params.fileId, function(err) {
-            if(err) {
+            if (err) {
               return res.status(500).json({
                 error: {
                   code: 500,
@@ -249,8 +235,8 @@ module.exports = function(dependencies, lib) {
 
             fileStream.end(Buffer.from(result, 'base64'));
 
-            filestore.store(req.params.fileId, fileMeta.contentType, fileMeta.metadata, fileStream, fileOptions, function(err, saved) {
-              if(err) {
+            filestore.store(req.params.fileId, fileMeta.contentType, fileMeta.metadata, fileStream, fileOptions, function(err) {
+              if (err) {
                 return res.status(500).json({
                   error: {
                     code: 500,
@@ -272,12 +258,13 @@ module.exports = function(dependencies, lib) {
     var usersEmail = [],
         usersID = [];
 
-    usersID = _.map(req.body, function (user) {
+    usersID = _.map(req.body, function(user) {
       usersEmail.push(user.preferredEmail);
+
       return new ObjectId(user._id);
     });
 
-    lib.document.UpdateOrCreate(usersID, req.params.fileId, function (err, result) {
+    lib.document.UpdateOrCreate(usersID, req.params.fileId, function(err, result) {
       if (err) {
         return res.status(500).json({
           error: {
@@ -289,8 +276,8 @@ module.exports = function(dependencies, lib) {
       }
 
       result.document = result.document.toObject();
+      var FileExtension = result.document.filename.split('.').pop();
 
-      var FileExtension = result.document.filename.split(".").pop();
       emailSender.sendEmail({
         data: {
           email: usersEmail,
@@ -300,10 +287,10 @@ module.exports = function(dependencies, lib) {
           fileUrl: url.format({
                     protocol: req.protocol,
                     host: req.get('host'),
-                    hash: '#/onlyoffice/editor/'+ FileExtension + '/' + req.params.fileId
+                    hash: '#/onlyoffice/editor/' + FileExtension + '/' + req.params.fileId
                   })
         }
-      }, function (err, ok) {
+      }, function(err) {
         if (err) {
           return res.status(500).json({
             error: {
@@ -328,8 +315,8 @@ module.exports = function(dependencies, lib) {
     var mimetype;
 
     req.on('data', function(data) {
-      if(file) {
-        file = Buffer.concat([file, data])
+      if (file) {
+        file = Buffer.concat([file, data]);
       } else {
         file = data;
       }
@@ -340,8 +327,7 @@ module.exports = function(dependencies, lib) {
 
       if (req.params.filename) {
         options.filename = req.params.filename;
-      }
-      else {
+      } else {
         options.filename = moment().format('MMMM Do YYYY, h:mm:ss');
       }
 
@@ -362,7 +348,7 @@ module.exports = function(dependencies, lib) {
           });
         }
 
-        lib.document.UpdateOrCreate([req.user._id], fileId, function (err, doc) {
+        lib.document.UpdateOrCreate([req.user._id], fileId, function(err) {
           if (err) {
             return res.status(500).json({
               error: {
@@ -379,4 +365,13 @@ module.exports = function(dependencies, lib) {
     });
   }
 
-}
+  return {
+    newFile: newFile,
+    existingFile: existingFile,
+    getMetaDataByUserId: getMetaDataByUserId,
+    removeFile: removeFile,
+    saveModif: saveModif,
+    addCoAuthor: addCoAuthor,
+    importFile: importFile
+  };
+};

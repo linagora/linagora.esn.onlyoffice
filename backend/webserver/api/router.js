@@ -1,11 +1,8 @@
 'use strict';
 
-
 module.exports = function(dependencies, lib, router) {
   const authorizationMW = dependencies('authorizationMW');
   var fileController = require('../controllers/filesController')(dependencies, lib);
-  var middleware = require('./middleware')(dependencies);
-
 
   //router.post('/convertion', controller.convertion);
 

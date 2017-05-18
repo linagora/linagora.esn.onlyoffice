@@ -1,26 +1,24 @@
 'use strict';
 
-module.exports = function(dependencies, lib) {
-  const logger = dependencies('logger');
-  const filestore = dependencies('filestore');
+module.exports = function() {
 
   var destinationExtensionExport = {
-    'docx': 'docy',
-    'xlsx': 'xlsy',
-    'pptx': 'ppty',
-    'odt': 'docx',
-    'ods': 'xlsx',
-    'odp': 'pptx',
-    'docy': false,
-    'xlsy': false,
-    'ppty': false
+    docx: 'docy',
+    xlsx: 'xlsy',
+    pptx: 'ppty',
+    odt: 'docx',
+    ods: 'xlsx',
+    odp: 'pptx',
+    docy: false,
+    xlsy: false,
+    ppty: false
   };
 
   var sourceWithDestination = {
     docy: ['docx', 'odt'],
     xlsy: ['xlsx', 'ods'],
-    ppty: ['pptx', 'odp'],
-  }
+    ppty: ['pptx', 'odp']
+  };
 
   var MimeDocumentApplication = [
     'application/pdf',
@@ -31,7 +29,6 @@ module.exports = function(dependencies, lib) {
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     'application/vnd.openxmlformats-officedocument.presentationml.presentation'
   ];
-
 
   function sourceToDestination(destination) {
     if (sourceWithDestination.docy.includes(destination)) {
@@ -46,7 +43,7 @@ module.exports = function(dependencies, lib) {
   }
 
   function opentDocumentToOffice(ext) {
-    if (ext === 'odt' ) {
+    if (ext === 'odt') {
       return 'docx';
     }
     if (ext === 'ods') {
@@ -58,7 +55,7 @@ module.exports = function(dependencies, lib) {
   }
 
   function officeToOpenDocument(ext) {
-    if (ext === 'docx' ) {
+    if (ext === 'docx') {
       return 'odt';
     }
     if (ext === 'xlsx') {
@@ -84,4 +81,4 @@ module.exports = function(dependencies, lib) {
     opentDocumentToOffice: opentDocumentToOffice,
     officeToOpenDocument: officeToOpenDocument
   };
-}
+};

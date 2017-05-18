@@ -24,7 +24,7 @@ function sendEmail(sharedDocument, done) {
   email.getMailer().sendHTML(message, properties.template, sharedDocument, done);
 }
 
-module.exports = function(dependencies, lib) {
+module.exports = function(dependencies) {
   email = dependencies('email');
 
   return {

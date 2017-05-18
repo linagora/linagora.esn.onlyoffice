@@ -1,15 +1,10 @@
-'use strict'
+'use strict';
 
-module.exports = function(dependencies) {
+module.exports = function() {
   const xmlrpc = require('xmlrpc');
 
-
-  return {
-    convertionWithCloudoo: convertionWithCloudoo
-  };
-
   function convertionWithCloudoo(options, callback) {
-    let client = xmlrpc.createSecureClient({host: 'cloudooo.erp5.net', port:'443', path: '/'})
+    const client = xmlrpc.createSecureClient({host: 'cloudooo.erp5.net', port: '443', path: '/'});
 
     client.methodCall('convertFile',
         [options.data,
@@ -18,6 +13,10 @@ module.exports = function(dependencies) {
          options.zip || false,
          options.refresh || false,
          options.conversion_kw || {}],
-        callback)
+        callback);
   }
-}
+
+  return {
+    convertionWithCloudoo: convertionWithCloudoo
+  };
+};
