@@ -5,7 +5,7 @@
     .directive('documentList', documentListComponent);
 
   function documentListComponent() {
-    let component = {
+    var component = {
       retrict: 'E',
       templateUrl: '/onlyoffice/app/documentList/document-list.html',
       controller: 'documentListController'

@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('linagora.esn.onlyoffice')
-  .config(function($stateProvider, routeResolver) {
+  .config(function($stateProvider) {
     $stateProvider
       .state('index', {
         url: '/onlyoffice/index',
@@ -13,6 +13,6 @@
         url: '/onlyoffice/editor/:fileExt/:fileId',
         templateUrl: '/onlyoffice/app/editor/editor.html',
         controller: 'EditorController'
-      })
+      });
   });
 })();

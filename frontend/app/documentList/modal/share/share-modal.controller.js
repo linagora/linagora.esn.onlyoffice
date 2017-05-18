@@ -13,7 +13,7 @@
 
       $scope.confirm = function() {
         $mdDialog.hide();
-        OnlyOfficeRestangular.one('coauthor').one('files', $scope.fileId).customPOST($scope.newUsersGroups).then(function () {
+        OnlyOfficeRestangular.one('coauthor').one('files', $scope.fileId).customPOST($scope.newUsersGroups).then(function() {
           notificationFactory.weakSuccess('Success', 'Le document a été partagé avec Succès');
         });
       };

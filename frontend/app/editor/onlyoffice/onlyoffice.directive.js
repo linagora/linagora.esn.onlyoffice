@@ -5,7 +5,7 @@
     .directive('onlyofficeEditor', onlyofficeEditor);
 
   function onlyofficeEditor() {
-    let component = {
+    var component = {
       retrict: 'E',
       scope: {
         fileExtension: '='

@@ -4,7 +4,7 @@
   angular.module('linagora.esn.onlyoffice')
     .controller('creationModalController', creationModalController);
 
-    function creationModalController($scope, $mdDialog, OnlyOfficeRestangular) {
+    function creationModalController($scope, $mdDialog) {
       $scope.filename = '';
 
       $scope.cancel = function() {

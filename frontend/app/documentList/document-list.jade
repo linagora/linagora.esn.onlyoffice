@@ -19,9 +19,9 @@ table.table
             //- ui-sref="editor({fileExt: getExtensionfromFileName(document.filename), fileId: document._id})" 
           button.md-icon-button.md-button.md-ink-ripple(ng-click="showImport(getExtensionfromFileName(document.filename), document)")
             i.mdi.mdi-download.mdi-18px
-          button.md-icon-button.md-button.md-ink-ripple(ng-if="document.metadata.creator.id == userId" ng-click="removeDocument(document)")
+          button.md-icon-button.md-button.md-ink-ripple(ng-if="document.metadata.creator[0]._id === userId" ng-click="removeDocument(document)")
             i.mdi.mdi-delete.mdi-18px
-          button.md-icon-button.md-button.md-ink-ripple(ng-if="document.metadata.creator.id == userId" ng-click="showShare(document._id)")
+          button.md-icon-button.md-button.md-ink-ripple(ng-if="document.metadata.creator[0]._id === userId" ng-click="showShare(document._id)")
             i.mdi.mdi-share-variant.mdi-18px
       tr(ng-if="!elements.length && infiniteScrollCompleted")
         td.text-center(colspan="5")

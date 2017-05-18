@@ -5,7 +5,7 @@
     .directive('creationDocument', creationDocument);
 
   function creationDocument() {
-    let component = {
+    var component = {
       retrict: 'E',
       templateUrl: '/onlyoffice/app/creation/creation-document.html',
       controller: 'creationDocumentController'

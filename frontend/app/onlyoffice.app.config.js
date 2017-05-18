@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('linagora.esn.onlyoffice')
-    .config(injectApplicationMenu)
+    .config(injectApplicationMenu);
 
     function injectApplicationMenu(dynamicDirectiveServiceProvider) {
       var onlyOfficeModule = new dynamicDirectiveServiceProvider.DynamicDirective(true, 'only-office-application-menu', {priority: 28});
