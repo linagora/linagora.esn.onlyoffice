@@ -8,7 +8,7 @@
     var directive = {
       retrict: 'E',
       replace: true,
-      template: applicationMenuTemplateBuilder('/#/onlyoffice/index', 'file-document-box', 'OnlyOffice')
+      template: applicationMenuTemplateBuilder('/#/onlyoffice/index', { url: '/onlyoffice/images/onlyoffice-icon.svg' }, 'OnlyOffice')
     };
 
     return directive;
