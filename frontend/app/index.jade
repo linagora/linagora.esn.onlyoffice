@@ -1,3 +1,6 @@
-div.col-md-12
-  document-list
-creation-document
+sub-header
+  onlyoffice-view-subheader
+.col-md-12.subheader-aware
+  document-list(ng-show="isCompatible")
+  onlyoffice-compatibility(ng-show="!isCompatible")
+creation-document(ng-show="isCompatible")

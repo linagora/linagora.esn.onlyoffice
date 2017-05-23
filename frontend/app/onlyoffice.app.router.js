@@ -7,7 +7,7 @@
       .state('index', {
         url: '/onlyoffice/index',
         templateUrl: '/onlyoffice/app/index.html',
-        controller: 'IndexController'
+        controller: 'OnlyOfficeIndexController'
       })
       .state('editor', {
         url: '/onlyoffice/editor/:fileExt/:fileId',
