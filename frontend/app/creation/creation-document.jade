@@ -4,18 +4,18 @@ md-fab-speed-dial.md-fab-bottom-right.md-fling(md-direction="up" aria-expanded="
       i.mdi.mdi-plus.mdi-24px
   md-fab-actions(aria-hidden="!isOpen")
     md-button.md-fab.md-raised.md-mini.word(aria-label="Writer" md-no-ink ng-click="showPrompt(event, 'docx')")
-      md-tooltip(md-direction="left" md-visible="tooltipVisible" md-autohide="false")
+      md-tooltip(md-direction="left"  md-autohide="false")
         | Writer
       i.mdi.mdi-file-word.mdi-24px
     md-button.md-fab.md-raised.md-mini.spreadsheet(aria-label="SpreadSheet" md-no-ink ng-click="showPrompt(event, 'xlsx')")
-      md-tooltip(md-direction="left" md-visible="tooltipVisible" md-autohide="false")
+      md-tooltip(md-direction="left" md-autohide="false")
         | SpreadSheet
       i.mdi.mdi-file-excel.mdi-24px
     md-button.md-fab.md-raised.md-mini.presentation(aria-label="Présentation" md-no-ink ng-click="showPrompt(event, 'pptx')")
-      md-tooltip(md-direction="left" md-visible="tooltipVisible" md-autohide="false")
+      md-tooltip(md-direction="left" md-autohide="false")
         | Présentation
       i.mdi.mdi-file-powerpoint.mdi-24px
     button.md-button.md-fab.md-raised.md-mini(ng-file-select ng-model="file" multiple="false")
-      md-tooltip(md-direction="left" md-visible="tooltipVisible" md-autohide="false")
+      md-tooltip(md-direction="left" md-autohide="false")
         | Import
       i.mdi.mdi-upload.mdi-24px
