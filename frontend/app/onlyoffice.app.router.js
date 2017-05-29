@@ -5,12 +5,12 @@
   .config(function($stateProvider) {
     $stateProvider
       .state('index', {
-        url: '/onlyoffice/index',
+        url: '/office/index',
         templateUrl: '/onlyoffice/app/index.html',
         controller: 'OnlyOfficeIndexController'
       })
       .state('editor', {
-        url: '/onlyoffice/editor/:fileExt/:fileId',
+        url: '/office/editor/:fileExt/:fileId',
         templateUrl: '/onlyoffice/app/editor/editor.html',
         controller: 'EditorController'
       });

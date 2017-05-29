@@ -39,17 +39,6 @@
         });
       }
 
-      //Manage the fab button
-      $scope.$watch('isOpen', function(isOpen) {
-        if (isOpen) {
-          $timeout(function() {
-            $scope.tooltipVisible = isOpen;
-          }, 600);
-        } else {
-          $scope.tooltipVisible = isOpen;
-        }
-      });
-
       $scope.showPrompt = function(ev, type) {
         // Appending dialog to document.body to cover sidenav in docs app
         var confirm = $mdDialog.prompt({

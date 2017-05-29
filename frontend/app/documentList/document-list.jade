@@ -14,7 +14,7 @@ table.table
         td {{document.uploadDate | date : 'medium'}}
         td {{document.length | bytes}}
         td
-          a.md-icon-button.md-button.md-ink-ripple(ng-href="#/onlyoffice/editor/{{getExtensionfromFileName(document.filename)}}/{{document._id}}", target="_blank")
+          a.md-icon-button.md-button.md-ink-ripple(ng-href="#/office/editor/{{getExtensionfromFileName(document.filename)}}/{{document._id}}", target="_blank")
             i.mdi.mdi-pencil.mdi-18px
             //- ui-sref="editor({fileExt: getExtensionfromFileName(document.filename), fileId: document._id})" 
           button.md-icon-button.md-button.md-ink-ripple(ng-click="showImport(getExtensionfromFileName(document.filename), document)")
