@@ -10,7 +10,7 @@ module.exports = function(dependencies) {
       .populate('document').exec(callback);
   }
 
-  function getDocumentsByUserID(userID, callback) {
+  function getDocumentsByUserID(userID, options, callback) {
     return documentModel.aggregate({$match: {users: userID}})
       .group({
         _id: userID,
@@ -35,6 +35,8 @@ module.exports = function(dependencies) {
         _id: userID,
         documents: {$push: '$documents'}
       })
+      .skip(options.offset)
+      .limit(options.limit)
       .exec(callback);
   }
 

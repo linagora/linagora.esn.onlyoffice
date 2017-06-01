@@ -1,5 +1,7 @@
 'use strict';
 
+const CONSTANTS = require('./constants');
+
 module.exports = function(dependencies, lib) {
   const filestore = dependencies('filestore');
   const emailSender = require('./emailSender').sharedDocument(dependencies, lib);
@@ -137,7 +139,12 @@ module.exports = function(dependencies, lib) {
   }
 
   function getMetaDataByUserId(req, res) {
-    lib.document.getDocumentsByUserID(req.user._id, function(err, doc) {
+    const options = {};
+
+    options.limit = +req.query.limit || CONSTANTS.DEFAULT_LIMIT;
+    options.offset = +req.query.offset || CONSTANTS.DEFAULT_OFFSET;
+
+    lib.document.getDocumentsByUserID(req.user._id, options, function(err, doc) {
       if (err) {
         return res.status(500).json({
           error: {
