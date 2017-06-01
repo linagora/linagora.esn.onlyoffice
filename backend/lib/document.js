@@ -11,34 +11,21 @@ module.exports = function(dependencies) {
   }
 
   function getDocumentsByUserID(userID, options, callback) {
-    return documentModel.aggregate({$match: {users: userID}})
-      .group({
-        _id: userID,
-        coAuthor: {$addToSet: '$users'},
-        documents: {$push: '$document'}
-      })
-      .lookup({
-        from: 'fs.files',
-        localField: 'documents',
-        foreignField: '_id',
-        as: 'documents'
-      })
-      .unwind('$documents')
-      .lookup({
-        from: 'users',
-        localField: 'documents.metadata.creator.id',
-        foreignField: '_id',
-        as: 'documents.metadata.creator'
-      })
-      .project('-documents.metadata.creator.password -documents.metadata.creator.accounts')
-      .group({
-        _id: userID,
-        documents: {$push: '$documents'}
-      })
-      .skip(options.offset)
-      .limit(options.limit)
-      .exec(callback);
+    return documentModel.aggregate([
+      {$match: {users: userID}},
+      {$lookup: {from: 'fs.files', localField: 'document', foreignField: '_id',as: 'documents2'}},
+      {$project: {_id: 1, users: 1, document: {$arrayElemAt: ['$documents2', 0]}}},
+      {$sort: {'document.uploadDate': -1}},
+      {$group: {
+          _id: userID,
+          documents: {$push: '$document'}
+      }},
+      {$skip: options.offset},
+      {$limit: options.limit}
+    ], callback);
   }
+
+
 
   function remove(documentID, callback) {
     return documentModel.remove({document: documentID}, callback);
