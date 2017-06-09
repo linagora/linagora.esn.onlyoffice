@@ -137,7 +137,7 @@ module.exports = function(dependencies, lib) {
   }
 
   function getMetaDataByUserId(req, res) {
-    lib.document.getDocumentsByUserID(req.user._id, function(err, doc) {
+    lib.document.getDocumentsByUserID(req.user._id, req.query, function(err, doc) {
       if (err) {
         return res.status(500).json({
           error: {

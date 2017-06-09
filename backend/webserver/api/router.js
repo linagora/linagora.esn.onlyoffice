@@ -2,7 +2,7 @@
 
 module.exports = function(dependencies, lib, router) {
   const authorizationMW = dependencies('authorizationMW');
-  var fileController = require('../controllers/filesController')(dependencies, lib);
+  var fileController = require('../controllers/file')(dependencies, lib);
 
   //router.post('/convertion', controller.convertion);
 
