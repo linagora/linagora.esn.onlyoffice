@@ -139,12 +139,7 @@ module.exports = function(dependencies, lib) {
   }
 
   function getMetaDataByUserId(req, res) {
-    const options = {};
-
-    options.limit = +req.query.limit || CONSTANTS.DEFAULT_LIMIT;
-    options.offset = +req.query.offset || CONSTANTS.DEFAULT_OFFSET;
-
-    lib.document.getDocumentsByUserID(req.user._id, options, function(err, doc) {
+    lib.document.getDocumentsByUserID(req.user._id, req.query, function(err, doc) {
       if (err) {
         return res.status(500).json({
           error: {
