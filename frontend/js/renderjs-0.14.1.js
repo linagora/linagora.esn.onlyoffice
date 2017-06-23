@@ -676,10 +676,6 @@ if (typeof document.contains !== 'function') {
            Node, FileReader, Blob, navigator, Event, URL) {
   "use strict";
 
-  if (window.hasOwnProperty("renderJS")) {
-    return;
-  }
-
   function readBlobAsDataURL(blob) {
     var fr = new FileReader();
     return new RSVP.Promise(function (resolve, reject) {
@@ -2240,7 +2236,7 @@ if (typeof document.contains !== 'function') {
             for (i = 0; i < css_list.length; i += 1) {
               stylesheet_registration_dict[css_list[i]] = null;
             }
-            //gadget_loading_klass_list.shift();
+            gadget_loading_klass_list.shift();
           }).then(function () {
 
             // select the target node
