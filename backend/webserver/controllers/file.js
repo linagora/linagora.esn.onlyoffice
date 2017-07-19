@@ -1,7 +1,5 @@
 'use strict';
 
-const CONSTANTS = require('./constants');
-
 module.exports = function(dependencies, lib) {
   const filestore = dependencies('filestore');
   const emailSender = require('./emailSender').sharedDocument(dependencies, lib);
