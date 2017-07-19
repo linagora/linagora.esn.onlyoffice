@@ -30,8 +30,6 @@ module.exports = function(dependencies) {
     ], callback);
   }
 
-
-
   function remove(documentID, callback) {
     return documentModel.remove({document: documentID}, callback);
   }
