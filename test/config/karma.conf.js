@@ -11,9 +11,10 @@ module.exports = function(config) {
       'frontend/components/angular-ui-router/release/angular-ui-router.min.js',
       'frontend/components/angular-mocks/angular-mocks.js',
       'frontend/components/dynamic-directive/dist/dynamic-directive.min.js',
-      'frontend/js/**/*.js',
+      'frontend/app/onlyoffice.app.js',
+      'frontend/app/**/*.js',
       'test/unit-frontend/**/*.js',
-      'frontend/views/**/*.jade'
+      'frontend/app/**/*.jade'
     ],
     frameworks: ['mocha'],
     colors: true,
@@ -22,7 +23,7 @@ module.exports = function(config) {
     browsers: ['PhantomJS', 'Chrome', 'Firefox'],
     reporters: ['coverage', 'spec'],
     preprocessors: {
-      'frontend/js/**/*.js': ['coverage'],
+      'frontend/app/**/*.js': ['coverage'],
       '**/*.jade': ['ng-jade2module']
     },
 
@@ -40,10 +41,13 @@ module.exports = function(config) {
 
     ngJade2ModulePreprocessor: {
       stripPrefix: 'frontend',
-      prependPrefix: '/linagora.esn.gsafe',
+      prependPrefix: '/linagora.esn.office',
       // setting this option will create only a single module that contains templates
       // from all the files, so you can load them all with module('templates')
-      jadeRenderConfig: {
+      jadeRenderOptions: {
+        basedir: require('path').resolve(__dirname, '../../node_modules/linagora-rse/frontend/views')
+      },
+      jadeRenderLocals: {
         __: function(str) {
           return str;
         }
