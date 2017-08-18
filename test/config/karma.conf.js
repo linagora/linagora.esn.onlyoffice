@@ -14,7 +14,7 @@ module.exports = function(config) {
       'frontend/app/onlyoffice.app.js',
       'frontend/app/**/*.js',
       'test/unit-frontend/**/*.js',
-      'frontend/app/**/*.jade'
+      'frontend/app/**/*.pug'
     ],
     frameworks: ['mocha'],
     colors: true,
@@ -24,7 +24,7 @@ module.exports = function(config) {
     reporters: ['coverage', 'spec'],
     preprocessors: {
       'frontend/app/**/*.js': ['coverage'],
-      '**/*.jade': ['ng-jade2module']
+      '**/*.pug': ['ng-jade2module']
     },
 
     plugins: [
