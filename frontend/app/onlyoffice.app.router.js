@@ -6,8 +6,7 @@
     $stateProvider
       .state('index', {
         url: '/office/index',
-        templateUrl: '/onlyoffice/app/index.html',
-        controller: 'OnlyOfficeIndexController'
+        templateUrl: '/onlyoffice/app/index.html'
       })
       .state('editor', {
         url: '/office/editor/:fileExt/:fileId',
