@@ -2,10 +2,10 @@ table.table
   thead
     tr
       th #
-      th Nom
-      th Date de Création
-      th Taille
-      th action
+      th #{__('Name')}
+      th #{__('Creation Date')}
+      th #{__('Size')}
+      th #{__('Action')}
   tbody
     infinite-list(load-more-elements='loadMoreElements()')
       tr(ng-repeat="document in elements track by $index" ng-if="elements.length > 0")
@@ -25,6 +25,6 @@ table.table
             i.mdi.mdi-share-variant.mdi-18px
       tr(ng-if="!elements.length && infiniteScrollCompleted")
         td.text-center(colspan="5")
-          | Pas de Document
+          | #{__('No Document')}
       tr(ng-if='infiniteScrollDisabled')
         td.text-center(colspan="5", openpaas-logo-spinner, spinner-start-active='1', spinner-size='0.5')

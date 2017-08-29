@@ -1,7 +1,7 @@
 'use strict';
 
-module.exports = function(application) {
-  var i18n = require('../../lib/i18n')();
+module.exports = function(dependencies, application) {
+  var i18nLib = require('../../lib/i18n')(dependencies);
 
-  application.use(i18n.init);
+  application.use(i18nLib.init);
 };

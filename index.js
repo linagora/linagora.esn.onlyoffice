@@ -19,7 +19,8 @@ var onlyOfficeModule = new AwesomeModule('linagora.esn.onlyoffice', {
     new Dependency(Dependency.TYPE_NAME, 'linagora.esn.core.filestore', 'filestore'),
     new Dependency(Dependency.TYPE_NAME, 'linagora.esn.core.webserver.wrapper', 'webserver-wrapper'),
     new Dependency(Dependency.TYPE_NAME, 'linagora.esn.core.webserver.middleware.authorization', 'authorizationMW'),
-    new Dependency(Dependency.TYPE_NAME, 'linagora.esn.core.db', 'db')
+    new Dependency(Dependency.TYPE_NAME, 'linagora.esn.core.db', 'db'),
+    new Dependency(Dependency.TYPE_NAME, 'linagora.esn.core.i18n', 'i18n')
   ],
 
   states: {
