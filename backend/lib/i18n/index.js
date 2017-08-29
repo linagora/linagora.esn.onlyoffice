@@ -1,19 +1,11 @@
 'use strict';
 
-var i18n = require('i18n');
+const DEFAULT_LOCALE = 'en';
 
-i18n.configure(
-  {
-    defaultLocale: 'en',
-    locales: ['en', 'fr', 'vi'],
-    directory: __dirname + '/locales',
-    updateFiles: false,
-    indent: '  ',
-    extension: '.json',
-    cookie: 'locale'
-  }
-);
+module.exports = function(dependencies) {
+  const i18n = dependencies('i18n');
 
-module.exports = function() {
+  i18n.setDefaultConfiguration({ defaultLocale: DEFAULT_LOCALE, directory: __dirname + '/locales' });
+
   return i18n;
 };
