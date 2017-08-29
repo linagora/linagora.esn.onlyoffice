@@ -3,6 +3,7 @@
   padding:0;
   width:100vw;
   height: ~"calc(100vh - @{header-height} - 3px)";
+  overflow: hidden;
 
   @media (min-width: @screen-md-min) {
     height: ~"calc(100vh - @{header-height-md} - 3px)";
@@ -15,6 +16,7 @@
 iframe {
   width: 100%;
   height: 100%;
+  border: none;
 }
 .try-editor-list {
     list-style: none;
