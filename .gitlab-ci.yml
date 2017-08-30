@@ -28,7 +28,7 @@ deploy_dev:
     name: dev
     url: https://dev.open-paas.org
   only:
-    - master@openpaas/linagora.esn.onlyoffice
+    - master
   script:
     - cd /srv/${CI_PROJECT_NAME}
     - git fetch --all
