@@ -2,8 +2,7 @@
 
 const express = require('express');
 
-module.exports = function(dependencies, lib) {
-
+module.exports = (dependencies, lib) => {
   const router = express.Router();
 
   require('./router')(dependencies, lib, router);

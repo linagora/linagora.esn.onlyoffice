@@ -1,8 +1,9 @@
 'use strict';
 
-module.exports = function() {
+module.exports = () => {
+  const _ = require('lodash');
 
-  var destinationExtensionExport = {
+  const destinationExtensionExport = {
     docx: 'docy',
     xlsx: 'xlsy',
     pptx: 'ppty',
@@ -14,13 +15,13 @@ module.exports = function() {
     ppty: false
   };
 
-  var sourceWithDestination = {
+  const sourceWithDestination = {
     docy: ['docx', 'odt'],
     xlsy: ['xlsx', 'ods'],
     ppty: ['pptx', 'odp']
   };
 
-  var MimeDocumentApplication = [
+  const MimeDocumentApplication = [
     'application/pdf',
     'application/vnd.oasis.opendocument.text',
     'application/vnd.oasis.opendocument.spreadsheet',
@@ -30,40 +31,17 @@ module.exports = function() {
     'application/vnd.openxmlformats-officedocument.presentationml.presentation'
   ];
 
+  const OfficeExt = ['docx', 'xlsx', 'pptx'];
+
+  return {
+    fileIsEditorDocument,
+    destinationFromSourceExt,
+    sourceToDestination,
+    isOfficeDocument
+  };
+
   function sourceToDestination(destination) {
-    if (sourceWithDestination.docy.includes(destination)) {
-      return 'docy';
-    }
-    if (sourceWithDestination.xlsy.includes(destination)) {
-      return 'xlsy';
-    }
-    if (sourceWithDestination.ppty.includes(destination)) {
-      return 'ppty';
-    }
-  }
-
-  function opentDocumentToOffice(ext) {
-    if (ext === 'odt') {
-      return 'docx';
-    }
-    if (ext === 'ods') {
-      return 'xlsx';
-    }
-    if (ext === 'odp') {
-      return 'pptx';
-    }
-  }
-
-  function officeToOpenDocument(ext) {
-    if (ext === 'docx') {
-      return 'odt';
-    }
-    if (ext === 'xlsx') {
-      return 'ods';
-    }
-    if (ext === 'pptx') {
-      return 'odp';
-    }
+    return _.findKey(sourceWithDestination, value => value.includes(destination));
   }
 
   function fileIsEditorDocument(contentType) {
@@ -74,11 +52,7 @@ module.exports = function() {
     return destinationExtensionExport[extension];
   }
 
-  return {
-    fileIsEditorDocument: fileIsEditorDocument,
-    destinationFromSourceExt: destinationFromSourceExt,
-    sourceToDestination: sourceToDestination,
-    opentDocumentToOffice: opentDocumentToOffice,
-    officeToOpenDocument: officeToOpenDocument
-  };
+  function isOfficeDocument(extension) {
+    return OfficeExt.includes(extension);
+  }
 };
