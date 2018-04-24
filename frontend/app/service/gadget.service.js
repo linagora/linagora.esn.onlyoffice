@@ -7,6 +7,15 @@
 
     function gadgetService() {
 
+      var gadgetPortalTypesMapping = {
+        docx: 'Text',
+        odt: 'Text',
+        ods: 'Spreadsheet',
+        xlsx: 'Spreadsheet',
+        pptx: 'Presentation',
+        odp: 'Presentation'
+      };
+
       function installGadget(context, gadget_url) {
         return context.getElement()
           .push(function() {
@@ -22,8 +31,13 @@
           });
       }
 
+      function getGadgetPortalTypeFromFileExtension(fileExtension) {
+        return gadgetPortalTypesMapping[fileExtension];
+      }
+
       return {
-        installGadget: installGadget
+        installGadget: installGadget,
+        getGadgetPortalTypeFromFileExtension: getGadgetPortalTypeFromFileExtension
       };
     }
 })();

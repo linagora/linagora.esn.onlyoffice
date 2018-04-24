@@ -51,7 +51,8 @@
           .push(function(result_list) {
             return result_list[3].render({
               jio_key: 'nut',
-              value: result_list[2].target.result
+              value: result_list[2].target.result,
+              portal_type: gadgetService.getGadgetPortalTypeFromFileExtension(sourceExt)
             });
           })
           .push(function() {

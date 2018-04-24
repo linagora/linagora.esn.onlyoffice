@@ -13,7 +13,7 @@
 
       var gadgets = {
          docx: 'https://text.app.officejs.com/f0c3dfd6ab/ooffice_text_gadget/development/',
-         xlsx: 'https://spreadsheet.app.officejs.com/7badc7e694/ooffice_spreadsheet_gadget/development/',
+         xlsx: 'https://spreadsheet.app.officejs.com/3e0f507406/app/onlyoffice.gadget.html',
          pptx: 'https://presentation.app.officejs.com/e45e218460/ooffice_presentation_gadget/development/'
       };
 
