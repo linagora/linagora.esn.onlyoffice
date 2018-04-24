@@ -4,8 +4,8 @@
   angular.module('linagora.esn.onlyoffice')
     .controller('OnlyOfficeEditorController', OnlyOfficeEditorController);
 
-    function OnlyOfficeEditorController($stateParams, $scope, $element, gadgetChooserService, gadgetService) {
-      var gadget = gadgetChooserService.gadgetChooser($scope.fileExtension);
+    function OnlyOfficeEditorController($stateParams, $scope, $element, EDITOR_WIDGET_URL, gadgetService) {
+      var gadget = EDITOR_WIDGET_URL;
 
       function save(context, fileId, sourceExt) {
         return context.getDeclaredGadget('editor')
@@ -51,7 +51,8 @@
           .push(function(result_list) {
             return result_list[3].render({
               jio_key: 'nut',
-              value: result_list[2].target.result
+              value: result_list[2].target.result,
+              portal_type: gadgetService.getGadgetPortalTypeFromFileExtension(sourceExt)
             });
           })
           .push(function() {
