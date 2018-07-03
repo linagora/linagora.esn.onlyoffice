@@ -22,7 +22,11 @@
     "test",
     "tests"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "body-parser": "~1.8.1",
+    "xml2js": "~0.4.4",
+    "ng-file-upload": "12.2.13"
+  },
   "devDependencies": {
     "angular": "1.3.16",
     "chai": "3.4.0",

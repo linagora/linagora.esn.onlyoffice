@@ -1,73 +1,77 @@
-.iframe {
-  margin:0;
-  padding:0;
-  width:100vw;
-  height: ~"calc(100vh - @{header-height} - 3px)";
-  overflow: hidden;
+.onlyoffice-root {
+  .iframe {
+    margin:0;
+    padding:0;
+    width:100vw;
+    height: ~"calc(100vh - @{header-height} - 3px)";
+    overflow: hidden;
 
-  @media (min-width: @screen-md-min) {
-    height: ~"calc(100vh - @{header-height-md} - 3px)";
+    @media (min-width: @screen-md-min) {
+      height: ~"calc(100vh - @{header-height-md} - 3px)";
+    }
+
+    @media (min-width: @screen-xl-min) {
+      height: ~"calc(100vh - @{header-height-xl} - 3px)";
+    }
+  }
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  .try-editor-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+  }
+  .try-editor-list li {
+      float: left;
+      margin: 25px;
+  }
+  .try-editor {
+      background-color: transparent;
+      background-position: center 0;
+      background-repeat: no-repeat;
+      font-size: 14px;
+      font-weight: bold;
+      height: 30px;
+      text-decoration: none;
   }
 
-  @media (min-width: @screen-xl-min) {
-    height: ~"calc(100vh - @{header-height-xl} - 3px)";
+  .md-dialog-resize {
+    width: 30%;
   }
-}
-iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-.try-editor-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-.try-editor-list li {
-    float: left;
-    margin: 25px;
-}
-.try-editor {
-    background-color: transparent;
-    background-position: center 0;
-    background-repeat: no-repeat;
-    font-size: 14px;
-    font-weight: bold;
-    height: 30px;
-    text-decoration: none;
-}
 
-.md-dialog-resize {
-  width: 30%;
-}
+  .md-button.md-fab {
+    line-height: 0;
+  }
 
-.md-button.md-fab {
-  line-height: 0 !important;
-}
+  .word:hover {
+    color: #234CA5;
+  }
+  .spreadsheet:hover {
+    color: #036635;
+  }
+  .presentation:hover {
+    color: #790000;
+  }
 
-.word:hover {
-  color: #234CA5;
-}
-.spreadsheet:hover {
-  color: #036635;
-}
-.presentation:hover {
-  color: #790000;
-}
-
-tags-input .autocomplete {
-  position: relative !important;
-}
-
-.not-compatible {
-  h1 {
+  .not-compatible {
+    h1 {
+      color: #818181;
+    }
     color: #818181;
   }
-  color: #818181;
+
+  creation-document {
+    .md-fab-bottom-right.fab-fixed {
+      position: fixed;
+    }
+  }
 }
 
-creation-document {
-  .md-fab-bottom-right.fab-fixed {
-    position: fixed;
+.onlyoffice-modal {
+  tags-input .autocomplete {
+    position: relative;
   }
 }
