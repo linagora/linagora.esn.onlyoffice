@@ -1,8 +1,8 @@
 'use strict';
 
-module.exports = function(dependencies, lib, router) {
+module.exports = (dependencies, lib, router) => {
   const authorizationMW = dependencies('authorizationMW');
-  var fileController = require('../controllers/file')(dependencies, lib);
+  const fileController = require('../controllers/file')(dependencies, lib);
 
   //router.post('/convertion', controller.convertion);
 
