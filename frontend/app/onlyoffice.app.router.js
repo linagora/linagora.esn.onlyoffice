@@ -4,7 +4,7 @@
   angular.module('linagora.esn.onlyoffice')
   .config(function($stateProvider) {
     $stateProvider
-      .state('index', {
+      .state('office.index', {
         url: '/office/index',
         templateUrl: '/onlyoffice/app/index.html'
       })
