@@ -28,12 +28,12 @@
     "ng-file-upload": "12.2.13"
   },
   "devDependencies": {
-    "angular": "1.3.16",
+    "angular": "1.3.20",
     "chai": "3.4.0",
     "jquery": "2.1.4",
-    "angular-mocks": "1.3.16",
-    "angular-ui-router": "0.2.15",
-    "dynamic-directive": "2.0.0",
+    "angular-mocks": "1.3.20",
+    "angular-ui-router": "0.2.18",
+    "dynamic-directive": "3.0.0",
     "lodash": "2.4.1",
     "body-parser": "~1.8.1",
     "xml2js": "~0.4.4",
