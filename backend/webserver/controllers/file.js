@@ -34,6 +34,7 @@ module.exports = (dependencies, lib) => {
             options.destination = utils.destinationFromSourceExt(options.source);
             if (options.destination) {
               options.toOnlyOfficeFormat = options.toOpenDocument = false;
+
               return resolve(convertion(options));
             }
           }
@@ -146,6 +147,7 @@ module.exports = (dependencies, lib) => {
         .then(convertion)
         .then(result => {
           fileStream.end(Buffer.from(result, 'base64'));
+
           return q.nfcall(filestore.delete, req.params.fileId);
         })
         .then(() => q.nfcall(filestore.store, req.params.fileId, file.fileMeta.contentType, file.fileMeta.metadata, fileStream, fileOptions))
