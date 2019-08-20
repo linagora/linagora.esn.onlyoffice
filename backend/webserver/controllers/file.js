@@ -7,7 +7,7 @@ module.exports = (dependencies, lib) => {
   const fs = require('fs');
   const path = require('path');
   const stream = require('stream');
-  const ObjectId = require('mongoose').Types.ObjectId;
+  const ObjectId = dependencies('db').mongo.mongoose.Types.ObjectId;
   const moment = require('moment');
   const q = require('q');
   const _ = require('lodash');
