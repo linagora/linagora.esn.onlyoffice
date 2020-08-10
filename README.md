@@ -3,6 +3,10 @@
 
 This repository contains source code of Office module for OpenPaaS ESN.
 
+## WARNING: THIS FEATURE IS DEPRECATED
+
+It will not receive any future updates or bug fixes.
+
 ## Install
 
 The current module is not enabled by default in the OpenPaaS ESN repository :
